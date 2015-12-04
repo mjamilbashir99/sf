@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/salesfinder/';
+$config['base_url']	= 'http://localhost/sf/';
 $config['site_title']	= 'Salefinder.se | Find the best deals and sales in one place';
 // uploading paths and resized image dimensions
 $config['image_path'] = FCPATH.'/assets/uploads/images/';
