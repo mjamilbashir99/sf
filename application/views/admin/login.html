@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<title><?=$this->config->item('title');?> Admin</title>
+	
+   <?=css_asset("style.css","admin")?>
+	<?=css_asset("jquery.wysiwyg.css","admin")?>
+	<?=css_asset("facebox.css","admin")?>
+	<?=css_asset("visualize.css","admin")?>
+	<?=css_asset("date_input.css","admin")?>
+	
+	<!--[if lt IE 8]><?=css_asset("ie.css","admin")?><![endif]-->
+
+
+</head>
+
+
+
+
+<body>
+	
+	<div id="hld">
+	
+		<div class="wrapper">		<!-- wrapper begins -->
+
+			
+			<div class="block small center login">
+			
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					
+					<h2>Login</h2>
+					<ul>
+						<li><a href="<?=base_url();?>">back to the site</a></li>
+					</ul>
+				</div>		<!-- .block_head ends -->
+				
+				
+				
+				
+				<div class="block_content">
+					<? if(isset($error)){ echo $error;} ?>
+					<form action="" method="post">
+						<p>
+							<label>Username:</label> <br />
+							<input type="text" class="text" value="" name="email" id="email"/>
+						</p>
+						
+						<p>
+							<label>Password:</label> <br />
+							<input type="password" class="text" value="" name="password" id="password"/>
+						</p>
+						
+						<p>
+							<input type="submit" class="submit"  name="submit" value="Login" /> &nbsp; 
+							<input type="checkbox" class="checkbox" checked="checked" id="rememberme" /> <label for="rememberme">Remember me</label>
+						</p>
+					</form>
+					
+				</div>		<!-- .block_content ends -->
+					
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+								
+			</div>		<!-- .login ends -->
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+		
+		</div>						<!-- wrapper ends -->
+		
+	</div>		<!-- #hld ends -->
+	
+	
+	<?=js_asset("jquery.js","admin")."\n";?>
+	<?=js_asset("custom.js","admin")?>		
+	
+	
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>StriVectin</title>
+<?=css_asset("style.css","admin");?>
+
+</head>
+<body>
+	<?=$user_reviews?>     
+	<!-- JS code -->
+	<?=js_asset("jquery.js","admin")."\n";?>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('.fb_pugin').hover(  
+		        // Handles the mouseover  
+		        function() {  
+		            $(this).children(".deletebtn").show();  	          
+		        },  
+		        // Handles the mouseout  
+		        function() {  
+		            $(this).children(".deletebtn").hide();   
+		        }  
+		    );
+		    $('.deletebtn').click(function(){
+		    	var ratingid = $(this).attr('rel');
+		    	var parentObj = $(this).parent();
+		    	var x = window.confirm("WARNING: This will permanently remove the selected review(s). Are you sure you wish to do this?");
+		    	if(x){
+		    		$(this).html('Loading...');	
+		    		$.ajax({
+						type: "POST",
+						  url: "<?=base_url()?>admin/deleterating",
+						  data: {rating_id:ratingid},
+						  success: function(msg){
+						  	parentObj.remove();	
+						  }
+					});
+		    	}
+		    	return false;	
+		    });		    
+		} );			
+	</script>            
+</body>
+</html>

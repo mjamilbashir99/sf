@@ -1,0 +1,29 @@
+<div id="header">
+	<div class="hdrl"></div>
+	<div class="hdrr"></div>
+	
+	<h1><a href="#">Salesfinder.se Admin</a></h1>
+	
+	<ul id="nav">
+		<!-- <li  class="<?=($page == 'Dashboard')?'active':''; ?>" ><a href="<?=base_url()?>admin">Dashboard</a></li> -->
+		<li class="<?=($page == 'users' || $page == 'user_invoices')?'active':''; ?>"><a href="#">Users</a>
+			<ul>
+				<li class="<?=($page == 'users')?'active':''; ?>" ><a href="<?=base_url()?>admin/users/1">Buyers</a></li>
+				<li class="<?=($page == 'users')?'active':''; ?>" ><a href="<?=base_url()?>admin/users/2">Retailers</a></li>
+				<li class="<?=($page == 'users')?'active':''; ?>" ><a href="<?=base_url()?>admin/subscriber">Subscriber</a></li>
+				<li class="<?=($page == 'user_invoices')?'active':''; ?>" ><a href="<?=base_url()?>admin/user_invoices">User Invoices</a></li>
+			</ul>
+		</li>
+        <li class="<?=($page == 'categories')?'active':''; ?>" ><a href="<?=base_url()?>admin/category">Categories</a></li>
+        <li class="<?=($page == 'product')?'active':''; ?>" ><a href="<?=base_url()?>admin/product">Products</a></li>
+        <li class="<?=($page == 'news')?'active':''; ?>" ><a href="<?=base_url()?>admin/news">News</a></li>
+        <li class="<?=($page == 'banner')?'active':''; ?>" ><a href="<?=base_url()?>admin/banner">Banners</a></li>
+        <li class="<?=($page == 'contents')?'active':''; ?>" ><a href="<?=base_url()?>admin/contents">Contents</a></li>
+        <li class="<?=($page == 'package')?'active':''; ?>" ><a href="<?=base_url()?>admin/package">Subscription Package</a></li> 
+		<li class="<?=($page == 'admins')?'active':''; ?>" ><a href="<?=base_url()?>admin/admins">Admins</a></li>         	
+       
+		
+	</ul>
+	
+	<p class="user">Hello, <a href="#"><?=$this->session->userdata('admin_name_fwf'); ?></a> | <a href="<?=base_url()?>admin/logout">Logout</a></p>
+</div>		<!-- #header ends -->

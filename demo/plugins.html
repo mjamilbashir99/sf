@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<head>
+    <title>Plugins</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <script src="http://enscrollplugin.com/releases/enscroll-0.6.0.min.js"></script>
+    <style>
+        .wrapper-category-selector{
+            margin-right: -48px; 
+        }
+        .accordion-group {
+            margin-bottom: 2px;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
+        .accordion-toggle{
+            display: table;
+            padding: 5px 10px;
+            font-size: 12px;
+            overflow: hidden;
+            background-color: #ececec;
+            background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#e7e7e7),color-stop(100% #ddd));
+            background-image: -webkit-linear-gradient(top,#e7e7e7 0,#ddd 100%);
+            background-image: -moz-linear-gradient(top,#e7e7e7 0,#ddd 100%);
+            background-image: -ms-linear-gradient(top,#e7e7e7 0,#ddd 100%);
+            background-image: -o-linear-gradient(top,#e7e7e7 0,#ddd 100%);
+            background-image: linear-gradient(top,#e7e7e7 0,#ddd 100%);
+            background-clip: padding-box;
+            position: relative;
+            z-index: 2;
+            min-height: 34px;
+            border: 1px solid #bebebe;;
+            border-bottom: 0;
+            background: #fff;
+            width: 126px;
+            bottom: -1px;
+        }
+        .accordion-toggle.collapsed{
+            border: 1px solid #bebebe;
+            background-color: #ececec;
+            min-height: 31px;
+        }
+        .accordion-body{
+            margin-top: 30px;
+            padding-top: 10px;
+            border: 1px solid #e5e5e5;
+        }
+        .wrapper-scroll {
+            overflow: auto;
+            width: 200px;
+            height: 130px;
+            margin-top: 5px;
+        }
+
+        .track3 {
+            width: 10px;
+            background: rgba(0, 0, 0, 0);
+            margin-right: 2px;
+            border-radius: 10px;
+            -webkit-transition: background 250ms linear;
+            transition: background 250ms linear;
+        }
+
+        .track3:hover,
+        .track3.dragging {
+            background: #d9d9d9; 
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .handle3 {
+            width: 7px;
+            right: 0;
+            background: #999;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 7px;
+            -webkit-transition: width 250ms;
+            transition: width 250ms;
+        }
+
+        .track3:hover .handle3,
+        .track3.dragging .handle3 {
+            width: 10px;
+        }
+        .navList{
+            list-style: none;
+            padding-left: 0px;
+        }
+
+        /*
+                .navList::-webkit-scrollbar-track , .navList::-moz-scrollbar-track
+                {
+                    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                    background-color: #F5F5F5;
+                }
+        
+                .navList::-webkit-scrollbar , .navList::-moz-scrollbar
+                {
+                    width: 5px;
+                    background-color: #F5F5F5;
+                }
+                .navList::-moz-scrollbar-thumb{
+                    background-color: #000000;
+                    border: 2px solid #555555;
+                }
+                .navList::-webkit-scrollbar-thumb
+                {
+                    background-color: #000000;
+                    border: 2px solid #555555;
+                }*/
+
+        .submit{
+            margin-bottom: 3px;
+        }
+
+        /** Price **/
+        .filterBox {
+            border: 1px solid #bebebe;
+            width: 178px;
+            -webkit-transform: scale(1);
+            z-index: 1;
+            background: #fff;
+            position: relative;
+        }
+        .noScrollBar {
+            display: block;
+            margin: 10px;
+        }
+        #slider-range  {
+            height: .5em;
+            background : #f3f3f3;
+            border: none;
+            margin: 15px 5px 15px 5px;
+        }
+        #slider-range .ui-widget-header {
+            display: block;
+            background: #a8a8a8;
+        }
+        #slider-range .ui-state-default {
+            height: 16px;
+            width: 16px;
+            border-radius: 16px 16px 16px 16px;
+            background: #404040;
+            border: none;
+            outline: none;
+        }
+        .sliderInput {
+            display: block;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .sliderInput span {
+            padding: 0 5px;
+        }
+        .sliderInput .border{
+            float: left;
+            position: relative;
+            width: 69px;
+            border: 1px solid #eaeaea;
+        }
+        .border .inputText {
+            width: 52px;
+            border: 0;
+            text-align: center;
+            font-size: 11px;
+            padding: 4px 0;
+        }
+        .border span {
+            line-height: 12px;
+            margin-top: 5px;
+            display: inline-block;
+            font-size: 11px;
+            position: absolute;
+            z-index: 12;
+            right: 2px;
+        }
+        .noJsHidden {
+            display: block;
+            clear: both;
+            overflow: hidden;
+        }
+        .sliderInput .noJsHidden{
+            margin:10px 0;
+        }
+        .noJsHidden input[type="checkbox"] {
+            float: left;
+        }
+        .noJsHidden label{
+            float: left;
+            font-size: 12px;
+            color: #b0b0b0;
+            font-weight: normal;
+            margin: 2px 5px
+        }
+        .btn-primary {
+            width: 100%;
+        }
+        .accordion-toggle:after {
+            font-family: 'Glyphicons Halflings';  
+            content: "\e113";
+            float: right;
+            color: grey;
+        }
+        .accordion-toggle.collapsed:after {
+            content: "\e114";
+        }
+        #collapseOne{
+            width: 212px;
+            margin: 0;
+        }
+        .category-selector{
+            width:100px;
+            height:300px
+        }
+        .search{
+            width: 100%;
+        }
+        .search-icon{
+            position: absolute;
+            top: 26px;
+            right: 18px;
+        }
+        #filter_items{
+            list-style:none;.
+        }
+        #filter_items li:after{
+            /* font-family: 'Glyphicons Halflings';  */
+            font-family: 'Glyphicons Halflings';
+            content: "\e014";
+            color: grey;
+            text-align: center;
+            font-size: 13px;
+            vertical-align: middle;
+            width: 10px;
+        }
+        #filter_items li{
+            border:1px solid #bebebe;
+            width:auto;
+            display: inline;
+            padding:3px;
+            cursor:pointer;
+        }
+
+        #filter_items li:hover{
+            background-color: #f3f3f3;
+        }
+        #filter_items li a{
+            text-decoration: none;
+            color: #404040;
+        }
+        #filter_items .value{
+            padding-right: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 11px;
+            max-width: 116px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col col-md-5">
+                <ul id="filter_items">
+                    <li><a><span class="value">abc</span></a></li>
+                    <li><a><span class="value">apple</span></a></li>
+                    <li><a><span class="value">def</span></a></li>
+                    <li><a><span class="value">ghi</span></a></li>
+                    <li><a><span class="value">jkl</span></a></li>
+                    <li><a><span class="value">old</span></a></li>
+                    <li><a><span class="value">new</span></a></li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="row panel-group">
+            <div class="col-md-2 wrapper-category-selector">
+                <div class='category-selector'>
+                    <div class="js-fToggle fHead closed accordion-toggle collapsed" data-toggle="collapse" data-target='#collapseOne'>
+                        <span class="fLabel" title="Filter">Varumärke</span>
+                    </div>
+                    <div id="collapseOne" class="accordion-collapse accordion-body filterBox collapse">
+                        <div class="noScrollBar">
+                            <form>
+                                <input placeholder="Search Me" class="search" id="box" type="text" aria-describedby="sizing-addon1" /> 
+                                <span class="glyphicon glyphicon-search search-icon" ></span>
+                                <div class="wrapper-scroll"><ul class="navList">
+                                        <li class="noJsHidden"><input type="checkbox" name="search_filter" value="apples"><label>apples</label></li>
+                                        <li class="noJsHidden"><input type="checkbox" name="search_filter" value="apricots"><label>apricots</label></li>
+                                        <li class="noJsHidden"><input type="checkbox" name="search_filter" value="acai"><label>acai</label></li>
+                                        <li class="noJsHidden"><input type="checkbox" name="search_filter" value="blueberry"><label>blueberry</label></li>
+                                        <li class="noJsHidden"><input type="checkbox" name="search_filter" value="bananas"><label>bananas</label></li>
+                                        <li class="noJsHidden"><input type="checkbox" name="search_filter" value="cherry"><label>cherry</label></li>
+                                        <li class="noJsHidden"><input type="checkbox" name="search_filter" value="coconut"><label>coconut</label></li>
+                                        <li class="noJsHidden"><input type="checkbox" name="search_filter" value="donut"><label>donut</label></li>
+                                        <li class="noJsHidden"><input type="checkbox" name="search_filter" value="durean"><label>durean</label></li>
+                                    </ul>
+                                </div>
+                                <input type="submit" class='submit btn btn-primary' disabled/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="price-plugin row">
+                    <div class="js-fToggle fHead closed accordion-toggle collapsed" data-toggle="collapse" data-target='#slider_body'>
+                        <span class="fLabel" title="Price Scroller">Pris</span>
+                    </div>
+                    <div class="filterBox accordion-collapse collapse" id='slider_body'>
+                        <div class="noScrollBar">
+                            <form>
+                                <div id="slider-range"></div>
+                                <div class="sliderInput">
+                                    <div class="border marginLeft right">
+                                        <input type='text' class='inputText' id='lowerPrice'>
+                                        <span>kr</span>
+                                    </div>
+                                    <span>-</span>
+                                    <div class="border" style="float:right">
+                                        <input type='text' class='inputText' id='upperPrice'>
+                                        <span>kr</span>
+                                    </div>
+                                   </div>
+                                <div>
+                                    <input type='submit' class="btn btn-primary" value='Go'>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#slider-range").slider({
+                range: true,
+                min: 79,
+                max: 27595,
+                values: [75, 27595], // initial values
+                slide: function (event, ui) {
+                    $("#lowerPrice").val(ui.values[ 0 ]);
+                    $("#upperPrice").val(ui.values[ 1 ]);
+                }
+            });
+            $("#lowerPrice").val($("#slider-range").slider("values", 0));
+            $("#upperPrice").val($("#slider-range").slider("values", 1));
+
+            $(".inputText").blur(function (event) {
+                var lowerPrice = parseInt($("#lowerPrice").val());
+                var upperPrice = parseInt($("#upperPrice").val());
+                console.log(upperPrice);
+                if (lowerPrice > upperPrice) {
+                    alert('Invalid price upper and lower limmits');
+                    return false;
+                }
+                if (event.target.id == "lowerPrice") {
+                    $("#slider-range").slider("values", 0, lowerPrice)
+                }
+                if (event.target.id == "upperPrice") {
+                    $("#slider-range").slider("values", 1, upperPrice);
+                }
+            });
+
+            $('#box').keyup(function () {
+                var valThis = $(this).val().toLowerCase();
+                var noresult = 0;
+                if (valThis == "") {
+                    $('.navList > li').show();
+                    noresult = 1;
+                    $('.no-results-found').remove();
+                } else {
+                    $('.navList > li').each(function () {
+                        var text = $(this).text().toLowerCase();
+                        var match = text.indexOf(valThis);
+                        if (match >= 0) {
+                            $(this).show();
+                            noresult = 1;
+                            $('.no-results-found').remove();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                }
+                ;
+                if (noresult == 0) {
+                    $(".navList").append('<li class="no-results-found">No results found.</li>');
+                }
+            });
+            $('.navList').click(function (val) {
+                var values = $("[name=search_filter]:checked");
+                if (values.length > 0) {
+                    $('.submit').removeAttr('disabled');
+                }
+                else
+                {
+                    $('.submit').attr('disabled', 'disabled');
+                }
+                var resultArray = ($.map($('input:checkbox:checked'), function (e, i) {
+                    return e.value;
+                }));
+                console.log(resultArray);
+            });
+            $("#filter_items li").click(function (event) {
+                $(this).remove();
+            });
+            $('.accordion-toggle').click(function () {
+                $('.accordion-collapse').collapse('hide');
+            });
+            $('.wrapper-scroll').enscroll({
+                showOnHover: false,
+                verticalTrackClass: 'track3',
+                verticalHandleClass: 'handle3'
+            });
+        });
+    </script>
+</body>
+</html>

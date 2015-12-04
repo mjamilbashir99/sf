@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title>Product Detail</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+   <?=js_asset("jquery.js","admin")."\n";?>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+</head>
+    <script>
+   $(document).ready(function() {        
+		  $('.add_wishlist').click(function(){
+		  var product_id = $(this).attr('rel');
+		  $.ajax({
+						type: "POST",
+						  url: "<?=base_url()?>product/add_wishlist",
+						  data: {product_id:product_id},
+						  success: function(msg){
+						  $('#msg').html('<ul>'+msg+'</ul>');	
+						  }
+					});	
+		 });
+		 
+    });
+    </script>
+<style type="text/css">
+#picture {
+    background-color: #999999;
+    border-radius: 40px 40px 40px 40px;
+    height: 600px;
+    margin-left: 450px;
+    width: 450px;
+}
+#picture ul{ list-style:none; padding-top: 40px;}
+#picture ul li{ list-style:none; display:inline; margin-right:20px; float: left;} 
+#picture  a.small, #picture a.small:visited { display:inline; width:100px; height:100px; text-decoration:none; background:#ffffff; top:0; left:0; border:0;}
+#picture a img {border:0;}
+#picture a.small:hover {text-decoration:none; background-color:#000000; color:#000000;}
+#picture a .large {display:block; position:absolute; width:0; height:0; border:0; top:0; left:0;}
+#picture a.small:hover .large {display:inline; position:absolute; top: 90px; left:150px; width:200px; height:200px; }
+</style>
+<body>
+<p>Show Product Detail.</p>
+<div id="picture"><ul><?=$product_detail?></ul>
+</div>
+<div id="msg"></div>
+</body>
+</html>

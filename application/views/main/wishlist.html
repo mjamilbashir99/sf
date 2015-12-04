@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<?php $this->load->view('main/head.html'); ?>
+	<body>
+		<div class="wrapper">
+			<div class="container">
+				<header>
+					<div class="header">
+						<?php $this->load->view('main/header.html')?>
+					</div><!--header-->
+				</header>
+				<div class="clear"></div><!--clear-->
+				<div class="main_body">
+					<div class="float_left">
+						<?php $this->load->view('main/reg_left_bar.html')?>
+					</div>
+					<div class="float_right" style="margin-left: 20px;">
+						<div class="catageries">
+							<p>
+								<?=image_asset('wishlist.jpg')?>
+                                                                <br>
+                                                                <br>
+							</p>
+							<p>
+                                                            Följande produkter finns i önskelistan. Om du önskar att ta bort någon produkt, klicka på det röda hjärtat på bilden.
+							</p>
+							<div id="product_cat">
+								<?=$products?>
+							</div>
+						</div><!--catageries-->
+						<div class="clear"></div>
+						<div class="pages_links">
+							<?php echo $pagination?>
+						</div>
+						<!--pages_links-->
+					</div><!--float_right>
+					<div class="clear"></div>
+					</div><!--main_body-->
+					<div class="clear"></div>
+					<!--footer-->
+					<?php $this->load->view('main/footer.html')?>
+				</div><!--container-->
+			</div><!--wrapper-->
+	</body>
+</html>

@@ -1,0 +1,43 @@
+<?php
+$cat_id = $_GET['cat_id'];
+$cat_info = get_category_recursive_info($cat_id);
+$parents = array_reverse($cat_info['parents']);
+if($cat_info['level']<=2){
+    $cat_heading = $cat_info['category']['title'];
+}else{
+    $cat_heading = $parents[1]['title'];
+}
+?>
+<div class="catagari">
+    <div class="mans_cata">
+            <div style="color: #333333;
+    font: 700 10px Tahoma; padding:10px 20px;"> > Home 
+            <?php
+            if ($cat_info['level']>1){
+                $parents[0];
+            }
+            ?>
+            </div>
+            <h4><?=$category_name?></h4>
+            <ul>
+                <li>
+                </li>
+            </ul>
+            <?=$product_category?>
+    </div><!--mans_cata-->
+    <div class="mans_cata">
+            <h4>Other choice in catategory:</h4>
+            <?=$other_choice ?>
+    </div><!--mans_cata-->
+    <div class="mans_cata">
+            <h4>realated catategory:</h4>
+            <?=$related_categories ?>
+    </div><!--mans_cata-->
+    <div class="mans_cata">
+            <h4><span class="active">Sales</span> no to be missed:</h4>
+            <?=$sales_to_missed ?>
+    </div><!--mans_cata-->
+</div><!--catagari-->
+<div style="margin-top:20px;">
+	<?=image_asset('ORDER_11.jpg')?>
+</div><!--float_left-->

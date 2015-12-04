@@ -1,0 +1,25 @@
+body {
+}
+body {
+	margin-top: 200px;
+	background: none;
+	position: relative;
+}
+header .header {
+
+}
+.header.floating {
+	background: #ffffff url("bg-header.jpg") 0 120px repeat-x;
+}
+.header.floating .nav {
+	margin-bottom: 0;
+	padding-bottom: 35px;
+}
+.navbar-fixed-top {
+	top: 0;
+	left: 0;
+    position: fixed;
+    z-index: 1030;
+    width: 100%;
+    margin: 0;
+}

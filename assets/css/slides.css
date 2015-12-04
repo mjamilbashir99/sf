@@ -1,0 +1,182 @@
+/* 
+	Resets defualt browser settings
+	reset.css
+*/
+
+
+/*
+	Slideshow
+*/
+
+#category_slides {
+	position:relative;
+	top:0px;
+	left:0px;
+	z-index:100;
+}
+
+/*
+	Slides container
+	Important:
+	Set the width of your slides container
+	Set to display none, prevents content flash
+*/
+
+.slides_container {
+	width:1175px;
+	overflow:hidden;
+	position:relative;
+	display:none;
+}
+
+/*
+	Each slide
+	Important:
+	Set the width of your slides
+	If height not specified height will be set by the slide content
+	Set to display block
+*/
+
+.slides_container div.slide {
+	width:1175px;
+	height:400px;
+	display:block;
+}
+
+
+/*
+	Next/prev buttons
+*/
+
+#category_slides .next,#category_slides .prev {
+	position:absolute;
+	top:107px;
+	left:-39px;
+	width:24px;
+	height:43px;
+	display:block;
+	z-index:101;
+}
+
+#category_slides .next {
+	left:585px;
+}
+
+/*
+	Pagination
+*/
+
+.pagination {
+	margin:26px auto 0;
+	width:100px;
+}
+
+.pagination li {
+	float:left;
+	margin:0 1px;
+	list-style:none;
+}
+
+.pagination li a {
+	display:block;
+	width:12px;
+	height:0;
+	padding-top:12px;
+	/*background-image:url(../img/pagination.png);*/
+	background-position:0 0;
+	float:left;
+	overflow:hidden;
+}
+
+.pagination li.current a {
+	background-position:0 -12px;
+}
+
+/*
+	Caption
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+#list {
+	height:130px;
+	width:1175px; 
+}
+.slider {
+	float:left;
+	left: -5000px; 
+	position:relative; 
+	visibility:hidden;	
+}
+	
+.slider ul {
+	height:100px;
+	width:600px; 
+}
+
+.slider ul li{
+	width:131px !important; 
+}
+
+.slider ul li img {
+	cursor:pointer;
+	height:100px; 
+	padding-top:3px;
+	width:120px;  
+}
+
+.prev {
+	cursor:pointer; 
+	float:left;
+	padding-top:60px;
+}
+
+.next {
+	cursor:pointer; 
+	float:right; 
+	padding-top:60px;
+}
+
+/************************************************
+	      CAPTIFY CAPTION		
+************************************************/
+.caption-top, .caption-bottom {
+	background: #000000;
+	color: #ffffff; 
+	cursor:default;
+	padding:2px; 
+	font-size:11px;   
+	text-align:center;
+}
+
+.caption-top {
+	border-width:0px;
+}
+
+.caption-bottom {
+	border-width:0px;
+}
+
+.caption a, .caption a {
+	background:#000;
+	border:none; 
+	text-decoration:none;  
+	padding:2px;
+}
+
+.caption a:hover, .caption a:hover {
+	background:#202020;
+}
+.showcase ul li{
+float:left;
+list-style:none;
+}

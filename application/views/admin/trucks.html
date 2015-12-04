@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<title><?=$this->config->item('title');?> Admin</title>
+	<?=css_asset("style.css","admin")?>
+	<?=css_asset("jquery.wysiwyg.css","admin")?>
+	<?=css_asset("facebox.css","admin")?>
+	<?=css_asset("visualize.css","admin")?>
+	<?=css_asset("date_input.css","admin")?>
+	<?=css_asset("datatables.css","admin")?>
+    
+	
+	<!--[if lt IE 8]><?=css_asset("ie.css","admin")?><![endif]-->
+
+</head>
+
+
+
+
+
+<body>
+	
+	<div id="hld">
+	
+		<div class="wrapper">		<!-- wrapper begins -->
+
+			<? include("header.html");?>
+			
+			
+			<div class="block">
+			
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					
+					<h2>Trucks</h2>
+					<ul>
+						
+						
+					</ul>
+					
+				</div>		<!-- .block_head ends -->
+				
+				
+				
+				<div class="block_content">
+					<div class="flash_message">
+						<?=$this->session->flashdata('message');?>
+					</div>
+					<form action="" method="post">
+					
+						<table cellpadding="0" cellspacing="0" width="100%" class="datatable" id="quiz_data">
+						
+							<thead>
+								<tr>
+									<th>Image</th>
+									<th>Truck</th>
+									<th>Driver</th>
+									<th>Email</th>
+									<th>Phone</th>
+									<th>Location</th>
+									<th>Twitter</th>
+									<th>Rating</th>
+									<th>Date Added</th>
+									<th></th>
+								</tr>
+							</thead>
+							
+							<tbody>
+								<?=$trucks_html;?>
+							</tbody>
+							
+						</table>
+						
+						
+						
+						
+						
+					</form>
+					
+				</div>		<!-- .block_content ends -->
+				
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+			</div>		<!-- .block ends -->
+		
+			<? include("footer.html");?>
+		
+		
+		</div>						<!-- wrapper ends -->
+		
+	</div>		<!-- #hld ends -->
+	
+	
+	
+	<?=js_asset("jquery.js","admin")."\n";?>
+	<?=js_asset("jquery.select_skin.js","admin")."\n";?>
+	<?=js_asset("facebox.js","admin");?>
+	
+	<?=js_asset("jquery.dataTables.min.js","admin")?>	
+	<?=js_asset("custom.js","admin")?>		
+	<script type="text/javascript">
+		$(document).ready(function() {
+		    $('#quiz_data').dataTable({
+				"iDisplayLength": 25,
+				"aoColumns": [
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,			
+					{ "asSorting": false }
+				]
+			});
+		    $('a[rel*=facebox]').facebox();
+		    $("form select.styled").select_skin();
+		    $('.bantruck').live('click',function(){
+		    	var myobj = this;
+				var pid = $(this).attr('rel');
+				var action = $(this).attr('title');
+				var x = window.confirm("WARNING: Are you sure you wish to "+action+" this truck?");
+				if(x){
+					$.post('<?=base_url()?>admin/ban_unban_truck/'+pid+'/'+action,{id:pid,action:action},function(response){
+						$(myobj).replaceWith(response.link);
+						$('.flash_message').html(response.message);	
+					},
+					'json');
+				}					
+				return false;
+			});
+			$('.deleteproduct').live('click',function(){
+				var pid = $(this).attr('rel');
+				var x = window.confirm("WARNING: This will permanently remove the selected truck(s). Are you sure you wish to do this?");
+				if(x){window.location = '<?=base_url()?>admin/delete_truck/'+pid;}
+				return false;
+			});	
+		} );
+	
+		
+	</script>
+
+	
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<title><?=$this->config->item('title');?> Admin</title>
+	<?=css_asset("style.css","admin")?>
+	<?=css_asset("jquery.wysiwyg.css","admin")?>
+	<?=css_asset("facebox.css","admin")?>
+	<?=css_asset("visualize.css","admin")?>
+	<?=css_asset("date_input.css","admin")?>
+	<?=css_asset("datatables.css","admin")?>
+    
+	<?=js_asset("jquery.js","admin")."\n";?>
+	
+	<?=js_asset("facebox.js","admin");?>
+	<?=js_asset("jquery.validate.min.js","admin")?>
+	<?=js_asset("jquery.dataTables.min.js","admin")?>
+	<?=js_asset("jquery.filestyle.mini.js","admin")?>
+	<?=js_asset("jquery.wysiwyg.js","admin")?>
+	<?=js_asset("jquery.visualize.js","admin")?>
+	<?=js_asset("jquery.select_skin.js","admin")."\n";?>
+	<?=js_asset("jquery.date_input.pack.js","admin")."\n";?>
+	<?=js_asset("tiny_mce/tiny_mce.js","admin")?>
+	<?=js_asset("ajaxupload.js","admin")?>	
+		
+	<?=js_asset("custom.js","admin")?>	
+	<!--[if lt IE 8]><?=css_asset("ie.css","admin")?><![endif]-->
+    <script type="text/javascript">
+	tinyMCE.init({
+		theme : "advanced",
+        mode : "textareas",
+        plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+		skin : "o2k7",
+		skin_variant : "silver",
+        // Theme options
+        theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+        theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_statusbar_location : "bottom",
+        theme_advanced_resizing : false
+	});
+	</script>
+
+</head>
+
+
+
+
+
+<body>
+	
+	<div id="hld">
+	
+		<div class="wrapper">		<!-- wrapper begins -->
+
+			<? include("header.html");?>
+			
+			
+			<div class="block">
+			
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					
+					<h2>Users</h2>
+					<ul class="tabs">
+			          <li><a href="#mangecats">View Users</a></li>
+			          <li><a href="#addcats">Add Retailer</a></li>
+			        </ul>						
+				</div>		<!-- .block_head ends -->
+				
+				
+				
+				<div class="block_content tab_content" id="mangecats">
+					<div class="flash_message">
+						<?=$this->session->flashdata('message');?>
+					</div>
+					<form action="" method="post">
+						
+						<table cellpadding="0" cellspacing="0" width="100%" class="datatable" id="quiz_data">
+						
+							<thead>
+								<tr>
+									<?php
+									if($group_id == 1){?>
+									<th>Email</th>
+									<th>Name</th>
+                                    <th>Gender</th>
+                                    <th>DOB</th>
+									<th>City</th>
+									<?php }
+									else{?>
+									<th>Email</th>
+									<th>Company</th>
+                                    <th>Subscription</th>
+									<th>Contact person</th>	
+									<?php }?>	
+									<th></th>
+								</tr>
+							</thead>
+							
+							<tbody>
+								<?=$users_html;?>
+							</tbody>
+							
+						</table>
+						
+						
+						
+						
+						
+					</form>
+					
+				</div>		<!-- .block_content ends -->
+				<div id="addcats" class="block_content tab_content" style="display: none;">
+			        <form method="post" enctype="multipart/form-data" id="form1" name="form1" action="">			          
+			          <p>
+							<label>Company Name*: </label>
+							<br>
+							<input type="text" id="company_name" class="required text small" name="company_name">
+							<span class="note error"></span>
+						</p>
+						<p>
+							<label>ORGANISATION NUMBER*: </label>
+							<br>
+							<input type="text" id="organisation_number" class="required text small" name="organisation_number">
+							<span class="note error"></span>
+						</p>
+			           <p>
+							<label>ADDRESS*: </label>
+							<br>
+							<input type="text" id="postal_address" class="required text small" name="postal_address">
+							<span class="note error"></span>
+						</p>
+						<p>
+							<label>ZIP CODE*: </label>
+							<br>
+							<input type="text" id="zipCode" class="required text small" name="zipCode">
+							<span class="note error"></span>
+						</p>
+						<p>
+							<label>CONTACT PERSON*: </label>
+							<br>
+							<input type="text" id="contact_person" class="required text small" name="contact_person">
+							<span class="note error"></span>
+						</p>
+						<p>
+							<label>CONTACT NUMBER*: </label>
+							<br>
+							<input type="text" id="phone_number" class="required text small" name="phone_number">
+							<span class="note error"></span>
+						</p>
+			          <p>
+			            <label>User Email*: </label>
+			            <br>
+			            <input type="text" id="email" class="required text small" name="email">
+			            <span class="note error"></span> </p>
+			         <p>
+			            <label>User Password*: </label>
+			            <br>
+			            <input type="password" id="password" class="required text small" name="password">
+			            <span class="note error"></span> </p>
+			          <p class="fileupload">
+			                <label>Logo:</label><br />
+			                <input type="file" id="fileupload" />
+			                <span id="uploadmsg"></span>
+			          </p>
+			          <p>
+			          	<input type="hidden" name="logo_image" id="logo_image" value="" class="required" />
+			            <span class="note error"></span>
+			            <input type="hidden" name="logo_ext" id="logo_ext" value="" />
+			          	<img id="proimage" /><br clear="all" />
+			          </p>
+                      <p>
+			            <label>REGION:</label>			
+			            <br />			
+			            <select class="styled" name="city_id" id="city_id">
+							<?=create_ddl($cities,'city_id','city_name')?>					
+						</select>			
+			            <span class="note error"></span> 
+			          </p>
+			          <p>
+			            <label>CHOOSE YOUR PLAN:</label>			
+			            <br />			
+			            <select class="styled" name="subsciption_level" id="subsciption_level">
+							<?=get_subscription_levels()?>					
+						</select>			
+			            <span class="note error"></span> 
+			          </p>
+			          <p class="cat_mod">
+			            <label>CHOOSE YOUR CATEGORY:</label>			
+			            <br />			
+			            <?=get_parent_cat_checklist()?>			
+			            <span class="note error"></span> 
+			          </p>
+			          <p>                           			
+                     	<input type="hidden" name="group_id" id="group_id" value="2" />
+			            <input type="submit" value="Submit" id="add" class="submit small" name="add">
+			          </p>
+			        </form>
+			    </div>
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+			</div>		<!-- .block ends -->
+		
+			<? include("footer.html");?>
+		
+		
+		</div>						<!-- wrapper ends -->
+		
+	</div>		<!-- #hld ends -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var cat_limit = 1;
+			$('#subsciption_level').change(function() {
+		    	cat_limit = $(this).find("option:selected").attr("title");
+		    	if(cat_limit == 0){
+		    		$('.cat_mod').hide();
+		    	}
+		    	else{
+		    		$('.cat_mod').show();
+		    	}
+		    });
+			$('.selected_cat').click(function(){
+				if(cat_limit > 0){
+					if($('.selected_cat:checked').length > 1){
+						return false;	
+					}
+				}
+			});
+			
+		    $('#quiz_data').dataTable({
+				"iDisplayLength": 25,
+				"aoColumns": [
+					{ "asSorting": [ "asc" ] },
+					null,
+					null,
+					<?php
+					if($group_id == 1){?>
+					null,
+					<?php }?>
+					null,			
+					{ "asSorting": false }
+				]
+			});
+			$("#fileupload").filestyle({ 
+			    image: "<?=image_asset_url('upload.gif','admin')?>",
+			    imageheight : 30,
+			    imagewidth : 80,
+			    width : 250
+			});
+			// File upload
+			if ($('#fileupload').length) {
+				new AjaxUpload('fileupload', {
+					action: '<?=base_url()?>admin/add_retailer_image/',
+					autoSubmit: true,
+					name: 'userfile',
+					responseType: 'json',
+					onSubmit : function(file , ext) {
+							$('.fileupload #uploadmsg').addClass('loading').text('Uploading...');
+							this.disable();	
+						},
+					onComplete : function(file, response) {
+							if(response == 'error'){
+								$('.fileupload #uploadmsg').removeClass('loading').text("Error occured in uploading! Try Again.");
+								this.enable();
+							}
+							else{
+								$('#proimage').attr('src',response.imagename);
+								$('#logo_image').val(response.name);
+								$('#logo_ext').val(response.ext);
+								$('.fileupload #uploadmsg').removeClass('loading').text("Uploaded Successfully");
+								this.enable();
+							}
+						}	
+				});
+			}
+			$("#form1").validate({
+		           errorPlacement: function(error, element) {
+		           error.appendTo(element.next('span'));
+				}
+		    });
+		    $('a[rel*=facebox]').facebox();
+		    $("form select.styled").select_skin();
+		    $('.banuser').live('click',function(){
+		    	var myobj = this;
+				var pid = $(this).attr('rel');
+				var action = $(this).attr('title');
+				var x = window.confirm("WARNING: Are you sure you wish to "+action+" this user?");
+				if(x){
+					$.post('<?=base_url()?>admin/ban_user/'+pid+'/'+action,{id:pid,action:action},function(response){
+						$(myobj).replaceWith(response.link);
+						$('.flash_message').html(response.message);	
+					},
+					'json');
+				}					
+				return false;
+			});
+			$('.deleteproduct').live('click',function(){
+				var pid = $(this).attr('rel');
+				var x = window.confirm("WARNING: This will permanently remove the selected user(s). Are you sure you wish to do this?");
+				if(x){window.location = '<?=base_url()?>admin/delete_user/'+pid;}
+				return false;
+			});	
+		} );
+	
+	</script>
+
+</body>
+</html>

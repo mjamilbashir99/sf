@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<title><?=$this->config->item('title');?> Admin</title>
+	<?=css_asset("style.css","admin")?>
+	<?=css_asset("jquery.wysiwyg.css","admin")?>
+	<?=css_asset("facebox.css","admin")?>
+	<?=css_asset("visualize.css","admin")?>
+	<?=css_asset("date_input.css","admin")?>
+	<!--[if lt IE 8]><?=css_asset("ie.css","admin")?><![endif]-->
+
+</head>
+
+
+
+
+
+<body>
+	
+	<div id="hld">
+	
+		<div class="wrapper">		<!-- wrapper begins -->
+
+			<? include("header.html");?>
+			
+			
+			<div class="block">
+			
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					
+					<h2>Web stats</h2>
+					
+					<ul class="tabs">
+						
+					</ul>
+				</div>		<!-- .block_head ends -->
+				
+				
+				
+				<!-- <div class="block_content tab_content" id="days">
+					<h1>Visitors in Real Time</h1>
+					<div id="widgetIframe"><iframe width="100%" height="350" src="http://analytics.pagecentrex.net/index.php?module=Widgetize&action=iframe&moduleToWidgetize=Live&actionToWidgetize=widget&idSite=6&period=day&date=yesterday&disableLink=1&widget=1&token_auth=c0e024d9200b5705bc4804722636378a" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe></div>
+					<h1>Visitors Frequency</h1>
+					<div id="widgetIframe"><iframe width="100%" height="250" src="http://analytics.pagecentrex.net/index.php?module=Widgetize&action=iframe&columns[]=nb_visits&moduleToWidgetize=VisitsSummary&actionToWidgetize=getEvolutionGraph&idSite=6&period=day&date=yesterday&disableLink=1&widget=1&token_auth=c0e024d9200b5705bc4804722636378a" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe></div>
+					<h1>Average Time</h1>
+					<div id="widgetIframe"><iframe width="100%" height="150" src="http://analytics.pagecentrex.net/index.php?module=Widgetize&action=iframe&moduleToWidgetize=VisitorInterest&actionToWidgetize=getNumberOfVisitsPerVisitDuration&idSite=6&period=day&date=yesterday&disableLink=1&widget=1&token_auth=c0e024d9200b5705bc4804722636378a" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe></div>
+					<h1>Evolution over the last days</h1>
+					<div id="widgetIframe"><iframe width="100%" height="500" src="http://analytics.pagecentrex.net/index.php?module=Widgetize&action=iframe&moduleToWidgetize=VisitsSummary&actionToWidgetize=index&idSite=6&period=day&date=yesterday&disableLink=1&widget=1&token_auth=c0e024d9200b5705bc4804722636378a" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe></div>
+					<h1>Average Visit</h1>
+					<div id="widgetIframe"><iframe width="100%" height="350" src="http://analytics.pagecentrex.net/index.php?module=Widgetize&action=iframe&moduleToWidgetize=VisitTime&actionToWidgetize=getVisitInformationPerServerTime&idSite=6&period=day&date=yesterday&disableLink=1&widget=1&token_auth=c0e024d9200b5705bc4804722636378a" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe></div>
+				</div> -->		<!-- .block_content ends -->
+				
+				
+				
+				
+				
+				<div class="block_content tab_content" id="months">
+				
+				</div>		<!-- .block_content ends -->
+				
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+			</div>		<!-- .block ends -->
+
+			<? include("footer.html");?>
+		
+		
+		</div>						<!-- wrapper ends -->
+		
+	</div>		<!-- #hld ends -->
+	
+	
+	<!--[if IE]><?=js_asset("excanvas.js","admin")?><![endif]-->
+	<?=js_asset("jquery.js","admin")."\n";?>
+
+	<?=js_asset("jquery.visualize.js","admin")?>	
+	<?=js_asset("jquery.visualize.tooltip.js","admin")?>	
+	
+	<?=js_asset("custom.js","admin")?>	
+	<script type="text/javascript">
+		$(document).ready(function() {
+		    // Web stats
+	$('table.stats').each(function() {
+		
+		if($(this).attr('rel')) {
+			var statsType = $(this).attr('rel');
+		} else {
+			var statsType = 'area';
+		}
+		
+		var chart_width = ($(this).parent('div').width()) - 60;
+		
+				
+		if(statsType == 'line' || statsType == 'pie') {		
+			$(this).hide().visualize({
+				type: statsType,	// 'bar', 'area', 'pie', 'line'
+				width: chart_width,
+				height: '240px',
+				colors: ['#6fb9e8', '#ec8526', '#9dc453', '#ddd74c'],
+				
+				lineDots: 'double',
+				interaction: true,
+				multiHover: 5,
+				tooltip: true,
+				tooltiphtml: function(data) {
+					var html ='';
+					for(var i=0; i<data.point.length; i++){
+						html += '<p class="chart_tooltip"><strong>'+data.point[i].value+'</strong> '+data.point[i].yLabels[0]+'</p>';
+					}	
+					return html;
+				}
+			});
+		} else {
+			$(this).hide().visualize({
+				type: statsType,	// 'bar', 'area', 'pie', 'line'
+				width: chart_width,
+				height: '240px',
+				colors: ['#6fb9e8', '#ec8526', '#9dc453', '#ddd74c']
+			});
+		}
+	});
+		} );
+	
+		
+	</script>	
+	
+
+	
+</body>
+</html>

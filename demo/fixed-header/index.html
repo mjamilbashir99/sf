@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	<meta name="verification" content="82ebea81ee11638f9d48fd9e8edd4d21" />
+	<link href="http://www.salefinder.se/assets/css/style.css?v=3" rel="stylesheet" type="text/css" />
+	<link href="http://www.salefinder.se/assets/css/new.css" rel="stylesheet" type="text/css" />
+	<link href="http://www.salefinder.se/assets/css/jquery-ui-1.8.23.custom.css" rel="stylesheet" type="text/css" />
+	<link href="http://www.salefinder.se/assets/css/validationEngine.jquery.css" rel="stylesheet" type="text/css" />
+	<link href="http://www.salefinder.se/assets/css/jquery.selectbox.css" rel="stylesheet" type="text/css" />
+	<link href="http://www.salefinder.se/assets/css/skins/tango/skin.css" rel="stylesheet" type="text/css" />
+	<link href="http://www.salefinder.se/assets/css/skins/tango/popular_sales.css" rel="stylesheet" type="text/css" />
+	<link href="http://www.salefinder.se/assets/css/skins/tango/detailpage.css" rel="stylesheet" type="text/css" />
+	<link href="http://www.salefinder.se/assets/css/uploadify.css" rel="stylesheet" type="text/css" />
+	<link href="http://www.salefinder.se/assets/css/colorbox.css" rel="stylesheet" type="text/css" />
+	<link href="http://www.salefinder.se/assets/admin/css/jquery.wysiwyg.css" rel="stylesheet" type="text/css" />
+	<link href="assets/css/style.css?v=3" rel="stylesheet" type="text/css" />
+
+	<style>
+	ul.uploadedimages {
+		list-style: none outside none;
+	}
+	ul.uploadedimages li {
+		float: left;
+		padding: 0 5px;
+		background: none !important;
+	}
+	</style>
+	<title>Salefinder.se | Find the best deals and sales in one place</title>
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/jquery-1.8.1.min.js"></script>
+
+	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/jquery.jcarousel.js"></script>
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/jquery-ui-date_picker.min.js"></script>
+
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/jquery.cycle.all.js"></script>
+
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/jquery.selectbox-0.2.js"></script>
+
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/jcarousellite.min.js"></script>
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/slides.min.jquery.js"></script>
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/jquery.placeholder.js"></script>
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/jquery.colorbox-min.js"></script>
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/jquery.validationEngine-en.js"></script>
+	<script type="text/javascript" src="http://www.salefinder.se/assets/js/jquery.validationEngine.js"></script>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('ul.treeMenu li:has("div")').find('span:first').addClass('closed');
+		$('ul.treeMenu li:has("div")').find('div').hide();	
+		$('ul.treeMenu li:has("div.selected")').find('div').show();	
+		$('.treeMenu li:has("div")').find('span:first').click (function (){ 
+			$(this).parent('li').find('span:first').toggleClass('opened');
+			$(this).parent('li').find('div:first').slideToggle();
+
+		});
+		$("#location_id").selectbox();
+		$("#retailer_id").selectbox();
+		var id = '';
+		$('.adslimit').click(function(){
+			alert('ADS Limit Reached! Please upgrade your subscription package or delete some product to add new');
+			return false;
+		});
+                           /* $('#rotating_banner').before('<div id="banner_nav">').cycle({ 
+                                fx:     'scrollDown',  
+                                timeout: 3000, 
+                                pager:  '#banner_nav'
+                            });*/
+
+jQuery('#popular_retailers').jcarousel({
+	scroll: 5
+});
+
+jQuery('#popular_sales').jcarousel({
+	scroll: 5,
+	auto:5,
+	wrap:'last'
+});
+jQuery('#more_from_category').jcarousel({
+	scroll: 4
+});
+jQuery('#more_from_retailer').jcarousel({
+	scroll: 4
+});
+jQuery('#more_on_detailpage').jcarousel({
+	scroll: 4
+});
+$('.product_detail').on('mouseover',function(){								
+	var id = $(this).attr('rel');								
+	$('#wish_heart_'+id).show();							
+
+});
+$('.product_detail').on('mouseout',function(){
+	var id = $(this).attr('rel');	
+	console.log('#wish_heart_'+id);
+	if($('#wish_heart_'+id).hasClass("heartred")){
+		return false;
+	}
+	$('#wish_heart_'+id).hide();
+});
+$('.heart').live('click',function(){
+	product_id = $(this).attr('rel');
+	if(product_id!=''){
+		$.ajax({
+			type: "POST",
+			url: "http://www.salefinder.se/product/add_wishlist",
+			data: {product_id:product_id},
+			success: function(msg){
+				$('#wish_heart_'+product_id).replaceWith(msg);
+				count =  parseInt($('#wishlist').html());
+				count = count +1 ;
+				$('#wishlist').html(count);
+				$('.topwishlistimg').html('<img src="http://www.salefinder.se/assets/images/heart_red.jpg" />');
+			}
+		});
+	}
+	else{
+		alert('product aleardy there');
+	}
+});
+							// from detail page
+							$('.add_wishlist').click(function(){
+								var product_id = $(this).attr('rel');
+								$.ajax({
+									type: "POST",
+									url: "http://www.salefinder.se/product/add_wishlist",
+									data: {product_id:product_id},
+									success: function(msg){
+										location.reload();
+									}
+								});
+							});
+							$('.heartred').live('click',function(){
+								product_id = $(this).attr('rel');
+								if(product_id!=''){
+									$.ajax({
+										type: "POST",
+										url: "http://www.salefinder.se/product/remove_pro_wishlist",
+										data: {product_id:product_id},
+										success: function(msg){
+											$('#wish_heart_'+product_id).replaceWith(msg);
+											count =  parseInt($('#wishlist').html());
+											count = count -1 ;
+											$('#wishlist').html(count);
+											if(count < 1)
+												$('.topwishlistimg').html('<img src="http://www.salefinder.se/assets/images/header.jpg" />');
+										}
+									});
+								}
+								else{
+									alert('product aleardy there');
+								}
+							});
+							$('.remove_wish').click(function(){
+								var wish_id = $(this).attr('rel');
+								window.location.href = "http://www.salefinder.se/product/remove_wishlist/"+wish_id;
+							});
+							$('#category_slides').slides({
+								preload: true,
+								preloadImage: 'img/loading.gif',
+								play: 5000,
+								pause: 2500,
+								hoverPause: true,
+								animationStart: function(current){
+									$('.caption').animate({
+										bottom:-35
+									},100);
+									if (window.console && console.log) {
+                            // example return of current slide number
+                            console.log('animationStart on slide: ', current);
+                        };
+                    },
+                    animationComplete: function(current){
+                    	$('.caption').animate({
+                    		bottom:0
+                    	},200);
+                    	if (window.console && console.log) {
+                            // example return of current slide number
+                            console.log('animationComplete on slide: ', current);
+                        };
+                    },
+                    slidesLoaded: function() {
+                    	$('.caption').animate({
+                    		bottom:0
+                    	},200);
+                    }
+                });
+
+						/*$('#city_form').submit(function() {
+							var city_id     = $("#by_location").val();
+							var retailer_id = $("#by_retailer").val();
+							var product_name = $("#pro_name").val();
+							$.ajax({
+								type: "POST",
+								url: "http://www.salefinder.se/product/search_form",
+								data: {city_id:city_id,retailer_id:retailer_id,product_name:product_name},
+								success: function(msg){								 	
+								 $('#product_cat').html(msg);	
+								}
+							});	
+							return false;	
+						}); */
+
+$('.search_bg input[placeholder]').placeholder();
+
+$('#color_picker_choose').click(function(event){
+	event.preventDefault();
+	if($('#color_picker').css('visibility')=='visible'){
+		$('#color_picker').css('visibility','hidden');
+	}else{
+		$('#color_picker').css('visibility','visible');
+	}
+}); 
+
+$('#selected_color_box').click(function(event){
+	event.preventDefault();
+	if($('#color_picker').css('visibility')=='visible'){
+		$('#color_picker').css('visibility','hidden');
+	}else{
+		$('#color_picker').css('visibility','visible');
+	}
+}); 
+
+
+$('a.color_box').click(function(event){
+	event.preventDefault();
+	var color = $(this).css('background-color');
+	var color_name = $(this).attr('href');
+	$('#color_value').val(color_name);
+	$('#selected_color_box').css('display','block');
+
+	$('#selected_color_box').css('background-color',color);
+	$('#selected_color_box').attr('href',color_name);
+	$('#choose_color_box').css('display','none');
+	$('#color_picker').css('visibility','hidden');
+	$('#filter_form').submit();
+	return false;
+});
+
+$(".other_filters").change(function(event){
+	event.preventDefault();
+	$('#filter_form').submit();
+}); 
+
+$('#remove_color_filter').click(function(event){
+	event.preventDefault();
+	$('#color_value').val("");
+	$('#filter_form').submit();
+})
+
+   /* $('*').not('div#color_picker,#selected_color_box,#color_picker_choose,#choose_color_box').click(function(event){
+        event.preventDefault();
+        console.log($(this));
+        console.log($('#color_picker'));
+        //$('#color_picker').css('visibility','hidden');
+    }) */
+$(document).on('click',':not(#color_picker,#selected_color_box,#color_picker_choose,#choose_color_box)',function(event){
+	var idArr = ['color_picker','selected_color_box','color_picker_choose','choose_color_box'];
+	if ( idArr.indexOf(event.target.id) == -1 ) {
+		$('#color_picker').css('visibility','hidden');
+	}
+})
+
+});
+
+
+</script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "276ba6b6-a496-4bf6-aaae-2441ba995d08", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+<style>
+.filters{
+	background-color:#fff;
+	border:solid 1px;
+}
+</style>
+</head> 	<body>
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+
+	$('#rotating_banner').before('<div id="banner_nav">').cycle({
+		fx : 'scrollDown',
+		timeout : 5000,
+		pager : '#banner_nav',
+	});
+});
+
+</script>
+<style>
+	#retailer_filter ul li {
+		text-align:left;
+	}
+</style>
+<header class="navbar-fixed-top">
+	<div class="header floating ">
+		<div class="container">
+		<!-- header -->
+		<div class="logo">
+			<a href="http://www.salefinder.se/"><img src="http://www.salefinder.se/assets/images/logo.jpg" /></a>
+		</div><!--logo-->
+		<div class="header_right">
+			<div class="top_wishlist">
+				<ul>
+					<li style="width:132px;">
+						<a href="http://www.salefinder.se/auth/register_retailer"><span style="text-decoration:underline;color:#0099FF;font-weight:bold;">SÄLJ PÅ SALEFINDER</span></a>
+					</li>
+					<li style="width:121px;">
+						<a href="http://www.salefinder.se/product/wishlist/">
+							<em class="topwishlistimg">
+								<img src="http://www.salefinder.se/assets/images/header.jpg" />                                    </em>
+								<span>ÖNSKELISTA (<b id="wishlist" style="color:red">0</b>)</span>
+							</a>
+						</li>
+						<li><a href="http://www.salefinder.se/auth/login"><img src="http://www.salefinder.se/assets/images/icon-account.jpg" /><span>LOGGA IN</span></a></li>
+						<li style="width:93px;">
+							<a href="http://www.salefinder.se/auth/register"><img src="http://www.salefinder.se/assets/images/icon-login.jpg" /><span>BLI MEDLEM </span></a>
+						</li>
+					</ul>
+			</div><!--top_wishlist-->
+				<div class="clear"></div><!--clear-->
+				<div class="search">
+
+					<form method="get" id="city_form" name="city_form" action="http://www.salefinder.se/product/searchresult">
+						<div class="search_bg">                    
+							<input type="text" name="pro_name" id="pro_name" value="" placeholder="SÖK..." />
+							<div class="dropdown_search">
+								<div class="search_loc" id="retailer_filter">
+									<select id="retailer_id" name="retailer_id">
+										<option value="">BUTIK</option>
+										<option  value="38">Brandos</option>
+										<option  value="41">Brothers</option>
+										<option  value="67">Buyviagraonline</option>
+										<option  value="58">Ellos</option>
+										<option  value="66">Ellos AB</option>
+										<option  value="3">FMH</option>
+										<option  value="39">Footway</option>
+										<option  value="54">FurnitureBox</option>
+										<option  value="35">Gant</option>
+										<option  value="37">H&amp;M</option>
+										<option  value="40">Heppo</option>
+										<option  value="42">MQ</option>
+										<option  value="64">MifsWeffigh</option>
+										<option  value="49">Nelly</option>
+										<option  value="69">NibEstils</option>
+										<option  value="71">RandallOl</option>
+										<option  value="12">Salefinder</option>
+										<option  value="62">Sarenza</option>
+										<option  value="60">Siba</option>
+										<option  value="63">Smartgirl</option>
+										<option  value="57">Stadium </option>
+										<option  value="36">Zalando</option>
+										<option  value="59">netonnet</option>
+										<option  value="70">troucttef</option>
+									</select>
+								</div><!--search_loc-->
+								<div class="search_loc" id="location_filter" style="display:none">
+									<select id="location_id" name="location_id">
+											<option value="">STAD</option>
+									</select>
+								</div><!--search_loc-->
+							</div><!--dropdown_search-->
+						</div><!--search_bg-->
+						<div class="search_btn">
+							<input type="image" src="http://www.salefinder.se/assets/images/search_btn.jpg" />
+
+						</div><!--search_btn-->
+					</form>
+				</div><!--search-->
+		</div><!--header_right-->
+		<div class="clear"></div><!--clear-->
+		<nav>
+			<div class="nav">
+				<ul>
+					<li style="border-left: 2px solid #fff;">
+						<a href="http://www.salefinder.se/category/?cat_id=176&per_page=" class="cat" rel="176">ELEKTRONIK</a>
+						<ul class="dropdown">
+							<li><a href="http://www.salefinder.se/category?cat_id=177&per_page=">DATORER</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=180&per_page=">TV</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=178&per_page=">TELEFONER</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=179&per_page=">KAMEROR</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=365&per_page=">DATORSKÄRM</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=367&per_page=">AUDIO</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=181&per_page=">VITVAROR</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=182&per_page=">HEM & HUSHÅLL</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=183&per_page=">SPEL</a></li>
+						</ul>
+
+					</li>
+					<li >
+						<a href="http://www.salefinder.se/category/?cat_id=184&per_page=" class="cat" rel="184">KLÄDER</a>
+						<ul class="dropdown">
+							<li><a href="http://www.salefinder.se/category?cat_id=186&per_page=">KVINNA</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=185&per_page=">MAN</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=189&per_page=">BARN</a></li>
+						</ul></li>
+					<li >
+						<a href="http://www.salefinder.se/category/?cat_id=202&per_page=" class="cat" rel="202">SKOR</a>
+						<ul class="dropdown">
+							<li><a href="http://www.salefinder.se/category?cat_id=203&per_page=">KVINNA</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=204&per_page=">MAN</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=285&per_page=">BARN</a></li>
+						</ul></li>
+					<li >
+						<a href="http://www.salefinder.se/category/?cat_id=209&per_page=" class="cat" rel="209">LEKSAKER</a>
+						<ul class="dropdown">
+							<li><a href="http://www.salefinder.se/category?cat_id=371&per_page=">LEKSAKER</a></li>
+						</ul></li>
+					<li >
+						<a href="http://www.salefinder.se/category/?cat_id=206&per_page=" class="cat" rel="206">MÖBLER</a>
+						<ul class="dropdown">
+							<li><a href="http://www.salefinder.se/category?cat_id=373&per_page=">MÖBLER</a></li>
+						</ul></li>
+					<li >
+						<a href="http://www.salefinder.se/category/?cat_id=207&per_page=" class="cat" rel="207">SPORT</a>
+						<ul class="dropdown">
+							<li><a href="http://www.salefinder.se/category?cat_id=352&per_page=">KLÄDER</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=353&per_page=">SKOR</a></li>
+							<li><a href="http://www.salefinder.se/category?cat_id=354&per_page=">UTRUSTNING</a></li>
+						</ul></li>
+					<li >
+						<a href="http://www.salefinder.se/category/?cat_id=208&per_page=" class="cat" rel="208">FRITID</a>
+						<ul class="dropdown">
+							<li><a href="http://www.salefinder.se/category?cat_id=382&per_page=">FRITID</a></li>
+						</ul></li>
+					<li >
+						<a href="http://www.salefinder.se/category/?cat_id=229&per_page=" class="cat" rel="229">BÖCKER</a>
+						<ul class="dropdown">
+							<li><a href="http://www.salefinder.se/category?cat_id=388&per_page=">BÖCKER</a></li>
+						</ul>
+
+					</li>
+				</ul>
+
+				<div class="clear"></div>
+			</div><!--nav-->
+		</nav>						
+			</div><!--container-->
+		</div><!--header-->
+</header>
+<div class="wrapper">
+				<div class="container">
+					<div class="rotating_banner_container">
+					<div class="banner_left" id="rotating_banner">
+						<a style="display:block; width:910px; height: 370px; " target="_blank" href="http://www.salefinder.se/product/product_detail/8549" >
+							<img class="banner_imgs" src="http://www.salefinder.se/assets/uploads/images/banners/1367774225879989040_o.jpg" />
+						</a>
+						<a style="display:block; width:910px; height: 370px; " target="_blank" href="http://www.salefinder.se/category?cat_id=204" >
+							<img class="banner_imgs" src="http://www.salefinder.se/assets/uploads/images/banners/13677736011670479117_o.jpg" />
+						</a>
+						<a style="display:block; width:910px; height: 370px; " target="_blank" href="http://www.salefinder.se/www/category?cat_id=185&per;_page=" >
+							<img class="banner_imgs" src="http://www.salefinder.se/assets/uploads/images/banners/13677798861021477137_o.jpg" />
+						</a>
+						<a style="display:block; width:910px; height: 370px; " target="_blank" href="http://www.salefinder.se" >
+							<img class="banner_imgs" src="http://www.salefinder.se/assets/uploads/images/banners/1367780993145205491_o.jpg" />
+						</a>
+						<a style="display:block; width:910px; height: 370px; " target="_blank" href="http://www.salefinder.se" >
+							<img class="banner_imgs" src="http://www.salefinder.se/assets/uploads/images/banners/13677810165838244_o.jpg" />
+						</a>
+					</div><!--banner_left-->
+				</div>
+				<div class="banner_right">
+					<a target="_blank" href="http://www.nike.com" >
+						<img src="http://www.salefinder.se/assets/uploads/images/banners/13676955221326805764_o.jpg" width="250" height="370" />
+					</a>
+				</div><!--banner_right-->
+				<div class="clear"></div><!--clear-->
+				<div class="bottom_ad">
+					<a target="_blank" href="http://www.zalando.se/rea/?order=sale" >
+						<img src="http://www.salefinder.se/assets/uploads/images/banners/1367698198393168498_o.jpg" />
+					</a>
+					<div class="clear"></div>
+				</div><!--bottom_ad-->
+
+		<div class="clear"></div><!--clear-->
+		<div class="main_body">
+			<div class="fasions_cata" id="">
+				<div class="slides_container">
+					<div class="slide">
+						<div class="fashion_cata" style="">
+							<img src="http://www.salefinder.se/assets/uploads/images/categories/1367266656445287530_o.jpg" />
+							<div class="categories_content">
+								<h4><a style="color:#fff;" href="http://www.salefinder.se/category/?cat_id=176"> ELEKTRONIK </a></h4>
+								<ul>
+									<li>
+										<a href="http://www.salefinder.se/category/?cat_id=177">DATORER</a>
+
+									<li>
+										<a href="http://www.salefinder.se/category/?cat_id=180">TV</a>
+									</li>
+									<li style="background:url(http://www.salefinder.se/assets/images/arrow-red.jpg) left no-repeat;">
+										<a style="color:red" href="http://www.salefinder.se/category/?cat_id=176"> MORE </a>
+									</li>
+								</ul>
+							</div>
+						</div><!--fashion_cata-->
+						<div class="fashion_cata" style="">
+							<img src="http://www.salefinder.se/assets/uploads/images/categories/1367265269602913267_o.jpg" />
+							<div class="categories_content">
+								<h4><a style="color:#fff;" href="http://www.salefinder.se/category/?cat_id=184"> KLÄDER </a></h4>
+								<ul>
+									<li></li>
+									<li><a href="http://www.salefinder.se/category/?cat_id=185">MAN</a></li>
+									<li style="background:url(http://www.salefinder.se/assets/images/arrow-red.jpg) left no-repeat;"><a style="color:red" href="http://www.salefinder.se/category/?cat_id=184"> MORE </a></li>
+								</ul>
+							</div>
+						</div><!--fashion_cata-->
+						<div class="fashion_cata" style="">
+							<img src="http://www.salefinder.se/assets/uploads/images/categories/1367696350745079465_o.jpg" />
+							<div class="categories_content">
+								<h4><a style="color:#fff;" href="http://www.salefinder.se/category/?cat_id=202"> SKOR </a></h4>
+								<ul>
+									<li><a href="http://www.salefinder.se/category/?cat_id=203">KVINNA</a></li>
+									<li><a href="http://www.salefinder.se/category/?cat_id=204">MAN</a></li>
+									<li style="background:url(http://www.salefinder.se/assets/images/arrow-red.jpg) left no-repeat;"><a style="color:red" href="http://www.salefinder.se/category/?cat_id=202"> MORE </a></li>
+								</ul>
+							</div>
+						</div><!--fashion_cata-->
+						<div class="fashion_cata" style="">
+							<img src="http://www.salefinder.se/assets/uploads/images/categories/13671816701790171872_o.jpg" />
+							<div class="categories_content">
+								<h4><a style="color:#fff;" href="http://www.salefinder.se/category/?cat_id=206"> MÖBLER </a></h4>
+								<ul>
+									<li><a href="http://www.salefinder.se/category/?cat_id=373">MÖBLER</a></li>
+									<li style="background:url(http://www.salefinder.se/assets/images/arrow-red.jpg) left no-repeat;"><a style="color:red" href="http://www.salefinder.se/category/?cat_id=206"> MORE </a></li>
+								</ul>
+							</div>
+						</div><!--fashion_cata-->
+						<div class="fashion_cata" style="width:225px;">
+							<img src="http://www.salefinder.se/assets/uploads/images/categories/13672651171153923225_o.jpg" />
+							<div class="categories_content">
+								<h4><a style="color:#fff;" href="http://www.salefinder.se/category/?cat_id=207"> SPORT </a></h4>
+								<ul>
+									<li><a href="http://www.salefinder.se/category/?cat_id=352">KLÄDER</a></li>
+									<li><a href="http://www.salefinder.se/category/?cat_id=353">SKOR</a></li>
+									<li style="background:url(http://www.salefinder.se/assets/images/arrow-red.jpg) left no-repeat;"><a style="color:red" href="http://www.salefinder.se/category/?cat_id=207"> MORE </a></li>
+								</ul>
+							</div>
+						</div><!--fashion_cata-->
+						<div class="clear"></div>
+					</div>
+					<div class="slide">
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div><!--fashions_cata-->
+			<div class="showcase">
+				<h4>POPULÄRA PRODUKTER</h4>
+				<div class="clear"></div>
+				<div id="popular_sales" class="jcarousel_popular_sales">
+					<ul>
+						<li style=""  class="pro_slider">
+							<a class="image_container" href="http://www.salefinder.se/product/product_detail/15359" > 
+								<img src="http://www.salefinder.se/assets/uploads/images/products/13715427791053654438_m.png" alt=""> 
+							</a>
+							<div class="clear"></div>
+							<div class="text_container" style="text-align:left;">
+								<p>
+									DOBBER The Secretary...                                                                            </p>
+									<span class="clear"></span>
+									<span style="float:left;"> Före: 599 kr
+										<br>
+										<label style="color:red">Nu: 299 kr</label> </span>
+										<span class="persentage_img">-50%</span><!--persentage_img-->
+									</div>
+								</li><!--pro_slider-->
+								<li style=""  class="pro_slider">
+									<a class="image_container" href="http://www.salefinder.se/product/product_detail/10285" > 
+										<img src="http://www.salefinder.se/assets/uploads/images/products/13687947831791909551_m.jpg" alt=""> 
+									</a>
+									<div class="clear"></div>
+									<div class="text_container" style="text-align:left;">
+										<p>
+											DAKOTA Snurrfåtölj +...                                                                            </p>
+											<span class="clear"></span>
+											<span style="float:left;"> Före: 4195 kr
+												<br>
+												<label style="color:red">Nu: 3495 kr</label> </span>
+												<span class="persentage_img">-17%</span><!--persentage_img-->
+											</div>
+										</li><!--pro_slider-->
+										<li style=""  class="pro_slider">
+											<a class="image_container" href="http://www.salefinder.se/product/product_detail/42502" > 
+												<img src="http://www.salefinder.se/assets/uploads/images/products/13849256001368245991_m.png" alt=""> 
+											</a>
+											<div class="clear"></div>
+											<div class="text_container" style="text-align:left;">
+												<p>
+													BONDELID Rasmus oxford...                                                                            </p>
+													<span class="clear"></span>
+													<span style="float:left;"> Före: 699 kr
+														<br>
+														<label style="color:red">Nu: 349 kr</label> </span>
+														<span class="persentage_img">-50%</span><!--persentage_img-->
+													</div>
+												</li><!--pro_slider-->
+												<li style=""  class="pro_slider">
+													<a class="image_container" href="http://www.salefinder.se/product/product_detail/36013" > 
+														<img src="http://www.salefinder.se/assets/uploads/images/products/1380955010685428751_m.jpg" alt=""> 
+													</a>
+													<div class="clear"></div>
+													<div class="text_container" style="text-align:left;">
+														<p>
+															Kling klänning                                                                            </p>
+															<span class="clear"></span>
+															<span style="float:left;"> Före: 599 kr
+																<br>
+																<label style="color:red">Nu: 549 kr</label> </span>
+																<span class="persentage_img">-8%</span><!--persentage_img-->
+															</div>
+														</li><!--pro_slider-->
+														<li style="border:none;"  class="pro_slider">
+															<a class="image_container" href="http://www.salefinder.se/product/product_detail/9724" > 
+																<img src="http://www.salefinder.se/assets/uploads/images/products/1368604124478054635_m.jpg" alt=""> 
+															</a>
+															<div class="clear"></div>
+															<div class="text_container" style="text-align:left;">
+																<p>
+																	CONNECT 1 U-Soffa...                                                                            </p>
+																	<span class="clear"></span>
+																	<span style="float:left;"> Före: 9995 kr
+																		<br>
+																		<label style="color:red">Nu: 6995 kr</label> </span>
+																		<span class="persentage_img">-30%</span><!--persentage_img-->
+																	</div>
+																</li><!--pro_slider-->
+																<li style=""  class="pro_slider">
+																	<a class="image_container" href="http://www.salefinder.se/product/product_detail/9735" > 
+																		<img src="http://www.salefinder.se/assets/uploads/images/products/1368606277499842756_m.jpg" alt=""> 
+																	</a>
+																	<div class="clear"></div>
+																	<div class="text_container" style="text-align:left;">
+																		<p>
+																			ETAGE 2,5-sits Soffa Tyg                                                                            </p>
+																			<span class="clear"></span>
+																			<span style="float:left;"> Före: 7995 kr
+																				<br>
+																				<label style="color:red">Nu: 6495 kr</label> </span>
+																				<span class="persentage_img">-19%</span><!--persentage_img-->
+																			</div>
+																		</li><!--pro_slider-->
+																		<li style=""  class="pro_slider">
+																			<a class="image_container" href="http://www.salefinder.se/product/product_detail/23148" > 
+																				<img src="http://www.salefinder.se/assets/uploads/images/products/1375098615775514993_m.jpg" alt=""> 
+																			</a>
+																			<div class="clear"></div>
+																			<div class="text_container" style="text-align:left;">
+																				<p>
+																					G-STAR / OLYMPIA PARKA                                                                            </p>
+																					<span class="clear"></span>
+																					<span style="float:left;"> Före: 2695 kr
+																						<br>
+																						<label style="color:red">Nu: 1349 kr</label> </span>
+																						<span class="persentage_img">-50%</span><!--persentage_img-->
+																					</div>
+																				</li><!--pro_slider-->
+																				<li style=""  class="pro_slider">
+																					<a class="image_container" href="http://www.salefinder.se/product/product_detail/23165" > 
+																						<img src="http://www.salefinder.se/assets/uploads/images/products/1375099990932450354_m.jpg" alt=""> 
+																					</a>
+																					<div class="clear"></div>
+																					<div class="text_container" style="text-align:left;">
+																						<p>
+																							WONDERLAND / THE QUEEN...                                                                            </p>
+																							<span class="clear"></span>
+																							<span style="float:left;"> Före: 329 kr
+																								<br>
+																								<label style="color:red">Nu: 168 kr</label> </span>
+																								<span class="persentage_img">-49%</span><!--persentage_img-->
+																							</div>
+																						</li><!--pro_slider-->
+																						<li style=""  class="pro_slider">
+																							<a class="image_container" href="http://www.salefinder.se/product/product_detail/23233" > 
+																								<img src="http://www.salefinder.se/assets/uploads/images/products/13751631451766294755_m.jpg" alt=""> 
+																							</a>
+																							<div class="clear"></div>
+																							<div class="text_container" style="text-align:left;">
+																								<p>
+																									5 INCH AND UP FOR NELLY...                                                                            </p>
+																									<span class="clear"></span>
+																									<span style="float:left;"> Före: 1195 kr
+																										<br>
+																										<label style="color:red">Nu: 599 kr</label> </span>
+																										<span class="persentage_img">-50%</span><!--persentage_img-->
+																									</div>
+																								</li><!--pro_slider-->
+																								<li style="border:none;"  class="pro_slider">
+																									<a class="image_container" href="http://www.salefinder.se/product/product_detail/34153" > 
+																										<img src="http://www.salefinder.se/assets/uploads/images/products/1380258202607650216_m.jpg" alt=""> 
+																									</a>
+																									<div class="clear"></div>
+																									<div class="text_container" style="text-align:left;">
+																										<p>
+																											Underprotection topp                                                                            </p>
+																											<span class="clear"></span>
+																											<span style="float:left;"> Före: 659 kr
+																												<br>
+																												<label style="color:red">Nu: 180 kr</label> </span>
+																												<span class="persentage_img">-73%</span><!--persentage_img-->
+																											</div>
+																										</li><!--pro_slider-->
+																										<li style=""  class="pro_slider">
+																											<a class="image_container" href="http://www.salefinder.se/product/product_detail/9728" > 
+																												<img src="http://www.salefinder.se/assets/uploads/images/products/1368604755429259877_m.jpg" alt=""> 
+																											</a>
+																											<div class="clear"></div>
+																											<div class="text_container" style="text-align:left;">
+																												<p>
+																													CONNECT 3 U-Soffa...                                                                            </p>
+																													<span class="clear"></span>
+																													<span style="float:left;"> Före: 14995 kr
+																														<br>
+																														<label style="color:red">Nu: 8995 kr</label> </span>
+																														<span class="persentage_img">-40%</span><!--persentage_img-->
+																													</div>
+																												</li><!--pro_slider-->
+																												<li style=""  class="pro_slider">
+																													<a class="image_container" href="http://www.salefinder.se/product/product_detail/21368" > 
+																														<img src="http://www.salefinder.se/assets/uploads/images/products/13741366851128297510_m.jpg" alt=""> 
+																													</a>
+																													<div class="clear"></div>
+																													<div class="text_container" style="text-align:left;">
+																														<p>
+																															LEVIS / JEANS NEUE GRAY                                                                            </p>
+																															<span class="clear"></span>
+																															<span style="float:left;"> Före: 995 kr
+																																<br>
+																																<label style="color:red">Nu: 299 kr</label> </span>
+																																<span class="persentage_img">-70%</span><!--persentage_img-->
+																															</div>
+																														</li><!--pro_slider-->
+																														<li style=""  class="pro_slider">
+																															<a class="image_container" href="http://www.salefinder.se/product/product_detail/33861" > 
+																																<img src="http://www.salefinder.se/assets/uploads/images/products/13801148821739806427_m.jpg" alt=""> 
+																															</a>
+																															<div class="clear"></div>
+																															<div class="text_container" style="text-align:left;">
+																																<p>
+																																	Maidenform shaper hipster                                                                            </p>
+																																	<span class="clear"></span>
+																																	<span style="float:left;"> Före: 269 kr
+																																		<br>
+																																		<label style="color:red">Nu: 70 kr</label> </span>
+																																		<span class="persentage_img">-74%</span><!--persentage_img-->
+																																	</div>
+																																</li><!--pro_slider-->
+																																<li style=""  class="pro_slider">
+																																	<a class="image_container" href="http://www.salefinder.se/product/product_detail/41241" > 
+																																		<img src="http://www.salefinder.se/assets/uploads/images/products/13839850271298196538_m.jpg" alt=""> 
+																																	</a>
+																																	<div class="clear"></div>
+																																	<div class="text_container" style="text-align:left;">
+																																		<p>
+																																			SAVANNAH AMY DRESS                                                                            </p>
+																																			<span class="clear"></span>
+																																			<span style="float:left;"> Före: 649 kr
+																																				<br>
+																																				<label style="color:red">Nu: 259 kr</label> </span>
+																																				<span class="persentage_img">-60%</span><!--persentage_img-->
+																																			</div>
+																																		</li><!--pro_slider-->
+																																		<li style="border:none;"  class="pro_slider">
+																																			<a class="image_container" href="http://www.salefinder.se/product/product_detail/42539" > 
+																																				<img src="http://www.salefinder.se/assets/uploads/images/products/13849340671790158631_m.png" alt=""> 
+																																			</a>
+																																			<div class="clear"></div>
+																																			<div class="text_container" style="text-align:left;">
+																																				<p>
+																																					BONDELID Poe Pique                                                                            </p>
+																																					<span class="clear"></span>
+																																					<span style="float:left;"> Före: 399 kr
+																																						<br>
+																																						<label style="color:red">Nu: 199 kr</label> </span>
+																																						<span class="persentage_img">-50%</span><!--persentage_img-->
+																																					</div>
+																																				</li><!--pro_slider-->
+																																				<li style=""  class="pro_slider">
+																																					<a class="image_container" href="http://www.salefinder.se/product/product_detail/9530" > 
+																																						<img src="http://www.salefinder.se/assets/uploads/images/products/13685259881561863764_m.jpg" alt=""> 
+																																					</a>
+																																					<div class="clear"></div>
+																																					<div class="text_container" style="text-align:left;">
+																																						<p>
+																																							Tröja                                                                            </p>
+																																							<span class="clear"></span>
+																																							<span style="float:left;"> Före: 199 kr
+																																								<br>
+																																								<label style="color:red">Nu: 70 kr</label> </span>
+																																								<span class="persentage_img">-65%</span><!--persentage_img-->
+																																							</div>
+																																						</li><!--pro_slider-->
+																																						<li style=""  class="pro_slider">
+																																							<a class="image_container" href="http://www.salefinder.se/product/product_detail/9572" > 
+																																								<img src="http://www.salefinder.se/assets/uploads/images/products/1368530168680162103_m.jpg" alt=""> 
+																																							</a>
+																																							<div class="clear"></div>
+																																							<div class="text_container" style="text-align:left;">
+																																								<p>
+																																									Tröja                                                                            </p>
+																																									<span class="clear"></span>
+																																									<span style="float:left;"> Före: 349 kr
+																																										<br>
+																																										<label style="color:red">Nu: 100 kr</label> </span>
+																																										<span class="persentage_img">-71%</span><!--persentage_img-->
+																																									</div>
+																																								</li><!--pro_slider-->
+																																								<li style=""  class="pro_slider">
+																																									<a class="image_container" href="http://www.salefinder.se/product/product_detail/21561" > 
+																																										<img src="http://www.salefinder.se/assets/uploads/images/products/1374220389108113774_m.jpg" alt=""> 
+																																									</a>
+																																									<div class="clear"></div>
+																																									<div class="text_container" style="text-align:left;">
+																																										<p>
+																																											ISSUE 1.3 / OLGA TROUSERS                                                                            </p>
+																																											<span class="clear"></span>
+																																											<span style="float:left;"> Före: 399 kr
+																																												<br>
+																																												<label style="color:red">Nu: 160 kr</label> </span>
+																																												<span class="persentage_img">-60%</span><!--persentage_img-->
+																																											</div>
+																																										</li><!--pro_slider-->
+																																										<li style=""  class="pro_slider">
+																																											<a class="image_container" href="http://www.salefinder.se/product/product_detail/22376" > 
+																																												<img src="http://www.salefinder.se/assets/uploads/images/products/13746479841279239911_m.jpg" alt=""> 
+																																											</a>
+																																											<div class="clear"></div>
+																																											<div class="text_container" style="text-align:left;">
+																																												<p>
+																																													PIECES / AMARILLO TOP                                                                            </p>
+																																													<span class="clear"></span>
+																																													<span style="float:left;"> Före: 149 kr
+																																														<br>
+																																														<label style="color:red">Nu: 75 kr</label> </span>
+																																														<span class="persentage_img">-50%</span><!--persentage_img-->
+																																													</div>
+																																												</li><!--pro_slider-->
+																																												<li style="border:none;"  class="pro_slider">
+																																													<a class="image_container" href="http://www.salefinder.se/product/product_detail/22377" > 
+																																														<img src="http://www.salefinder.se/assets/uploads/images/products/1374648155305594057_m.jpg" alt=""> 
+																																													</a>
+																																													<div class="clear"></div>
+																																													<div class="text_container" style="text-align:left;">
+																																														<p>
+																																															AURA BOUTIQUE / ZIP...                                                                            </p>
+																																															<span class="clear"></span>
+																																															<span style="float:left;"> Före: 379 kr
+																																																<br>
+																																																<label style="color:red">Nu: 189 kr</label> </span>
+																																																<span class="persentage_img">-50%</span><!--persentage_img-->
+																																															</div>
+																																														</li><!--pro_slider-->
+																																														<li style=""  class="pro_slider">
+																																															<a class="image_container" href="http://www.salefinder.se/product/product_detail/22380" > 
+																																																<img src="http://www.salefinder.se/assets/uploads/images/products/13746485211567743236_m.jpg" alt=""> 
+																																															</a>
+																																															<div class="clear"></div>
+																																															<div class="text_container" style="text-align:left;">
+																																																<p>
+																																																	CLUB L / MINDY PEPLUM...                                                                            </p>
+																																																	<span class="clear"></span>
+																																																	<span style="float:left;"> Före: 299 kr
+																																																		<br>
+																																																		<label style="color:red">Nu: 149 kr</label> </span>
+																																																		<span class="persentage_img">-50%</span><!--persentage_img-->
+																																																	</div>
+																																																</li><!--pro_slider-->
+																																																<li style=""  class="pro_slider">
+																																																	<a class="image_container" href="http://www.salefinder.se/product/product_detail/22386" > 
+																																																		<img src="http://www.salefinder.se/assets/uploads/images/products/13746491812078580470_m.jpg" alt=""> 
+																																																	</a>
+																																																	<div class="clear"></div>
+																																																	<div class="text_container" style="text-align:left;">
+																																																		<p>
+																																																			WONDERLAND / INDIANA...                                                                            </p>
+																																																			<span class="clear"></span>
+																																																			<span style="float:left;"> Före: 498 kr
+																																																				<br>
+																																																				<label style="color:red">Nu: 378 kr</label> </span>
+																																																				<span class="persentage_img">-24%</span><!--persentage_img-->
+																																																			</div>
+																																																		</li><!--pro_slider-->
+																																																		<li style=""  class="pro_slider">
+																																																			<a class="image_container" href="http://www.salefinder.se/product/product_detail/23141" > 
+																																																				<img src="http://www.salefinder.se/assets/uploads/images/products/13750978571177256183_m.jpg" alt=""> 
+																																																			</a>
+																																																			<div class="clear"></div>
+																																																			<div class="text_container" style="text-align:left;">
+																																																				<p>
+																																																					SAVANNAH / INAMAY DRESS                                                                            </p>
+																																																					<span class="clear"></span>
+																																																					<span style="float:left;"> Före: 499 kr
+																																																						<br>
+																																																						<label style="color:red">Nu: 149 kr</label> </span>
+																																																						<span class="persentage_img">-70%</span><!--persentage_img-->
+																																																					</div>
+																																																				</li><!--pro_slider-->
+																																																				<li style=""  class="pro_slider">
+																																																					<a class="image_container" href="http://www.salefinder.se/product/product_detail/23142" > 
+																																																						<img src="http://www.salefinder.se/assets/uploads/images/products/13750981371064426450_m.jpg" alt=""> 
+																																																					</a>
+																																																					<div class="clear"></div>
+																																																					<div class="text_container" style="text-align:left;">
+																																																						<p>
+																																																							SEE BY CHLOÉ / LYDIA...                                                                            </p>
+																																																							<span class="clear"></span>
+																																																							<span style="float:left;"> Före: 3907 kr
+																																																								<br>
+																																																								<label style="color:red">Nu: 1954 kr</label> </span>
+																																																								<span class="persentage_img">-50%</span><!--persentage_img-->
+																																																							</div>
+																																																						</li><!--pro_slider-->
+																																																						<li style="border:none;"  class="pro_slider">
+																																																							<a class="image_container" href="http://www.salefinder.se/product/product_detail/34152" > 
+																																																								<img src="http://www.salefinder.se/assets/uploads/images/products/1380258120953613408_m.jpg" alt=""> 
+																																																							</a>
+																																																							<div class="clear"></div>
+																																																							<div class="text_container" style="text-align:left;">
+																																																								<p>
+																																																									Underprotection shorts                                                                            </p>
+																																																									<span class="clear"></span>
+																																																									<span style="float:left;"> Före: 389 kr
+																																																										<br>
+																																																										<label style="color:red">Nu: 120 kr</label> </span>
+																																																										<span class="persentage_img">-69%</span><!--persentage_img-->
+																																																									</div>
+																																																								</li><!--pro_slider-->
+																																																							</ul>
+																																																						</div>
+																																																						<div class="clear"></div>
+																																																					</div><!--showcase-->
+																																																					<div class="clear"></div>
+																																																					<div class="showcase" style="height:200px;">
+																																																						<h4>POPULÄRA BUTIKER</h4>
+																																																						<div class="clear"></div>
+																																																						<div class="arrow_left"></div><!--arrow_left-->
+																																																						<div class="companies_logo">
+																																																							<ul id="popular_retailers" class="jcarousel-skin-tango">
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/63">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/1379993603352231077_m.png"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/63"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/49">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/13692977951137358784_m.jpg"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/49"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/36">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/1369297193583222855_m.jpg"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/36"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/37">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/1369297723597153465_m.jpg"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/37"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/42">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/1369346875767974657_m.jpg"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/42"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/54">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/1369346321275501209_m.jpg"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/54"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/38">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/13692979471459568969_m.gif"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/38"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/66">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/1392674889113212264_m.png"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/66"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/62">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/1378689977361399538_m.png"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/62"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/41">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/1369346515879927091_m.jpg"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/41"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																								<li>
+																																																									<div class="image_container">
+																																																										<a hrfe="http://www.salefinder.se/retailer/index/39">
+																																																											<img src="http://www.salefinder.se/assets/uploads/images/retailer/1369347314119647588_m.jpg"/>
+																																																										</a>
+																																																									</div>
+																																																									<div class="readmore_container">
+																																																										<a href="http://www.salefinder.se/retailer/index/39"> <img src="http://www.salefinder.se/assets/images/arrow_red.jpg" alt="" style="margin-right: 5px;">Se alla produkter </a>
+																																																									</div>
+																																																								</li>
+																																																							</ul>
+																																																						</div><!--companies_logo-->
+																																																						<div class="clear"></div>
+																																																					</div><!--showcase-->
+																																																					<div class="clear"></div>
+																																																				</div><!--main_body-->
+																																																				<!--footer-->
+																																																				<div class="footer">
+																																																					<style>
+																																																					.newsletter_footer input{
+																																																						width: 72px; !important
+																																																					}
+																																																					.newsletter_footer #newsletteremail{
+																																																						width: 172px; !important
+																																																					}
+																																																					</style>
+																																																					<script>
+																																																					function beforeCall(form, options){
+																																																						return true;
+																																																					} 
+																																																					function ajaxValidationCallback(status, form, json, options){
+																																																						if(status === true){
+																																																							$('#newsletteremail').val('');
+																																																							if(json.msg)
+																																																								$('#newsletteremail').validationEngine('showPrompt', 'Email added successfully', 'pass', true);
+																																																							else
+																																																								$('#newsletteremail').validationEngine('showPrompt', 'Email already exist!', 'error', true);	
+																																																						}
+																																																					}
+																																																					$(document).ready(function(){
+																																																						$("#newsletter_form").validationEngine('attach', {
+																																																							ajaxFormValidation: true,
+																																																							ajaxFormValidationMethod: 'post',
+																																																							onBeforeAjaxFormValidation : beforeCall,
+																																																							onAjaxFormComplete: ajaxValidationCallback
+																																																						});
+																																																					});
+																																																					jQuery(".banners").find("a").attr("target","_blank");
+																																																					</script>
+																																																					<div class="newsletter_footer">
+																																																						<p>PRENUMERA PÅ VÅRT NYHETSBREV:</p>	
+																																																						<form method="post" id="newsletter_form" name="newsletter_form" action="http://www.salefinder.se/product/newsletter_subscribe">
+																																																							<input name="email" type="text" class="validate[required,custom[email]] text small" id="newsletteremail" width="100px;" />
+																																																							<input type="image" src="http://www.salefinder.se/assets/images/news_btn.jpg" width="72px;" />
+																																																						</form>		
+																																																					</div><!--newsletter_footer-->
+																																																					<div class="footer_nav">
+																																																						<ul>
+																																																							<li>
+																																																								<a href="http://www.salefinder.se/">HEM</a>
+																																																							</li>
+																																																							<li>
+																																																								|
+																																																							</li>
+																																																							<li><a href="http://www.salefinder.se/main/content/1/om-oss">OM OSS</a></li><li><a href="#" class="topopup"></li><</li><li><a href="http://www.salefinder.se/main/content/2/sÅ-fungerar-det">SÅ FUNGERAR DET</</li>		</ul>
+																																																						</div><!--footer_nav-->
+																																																						<div class="follow_us">
+																																																							<ul>
+																																																								<li style="margin-right:10px;">
+																																																									FÖLJ OSS:
+																																																								</li>
+																																																								<li>
+																																																									<a href="https://www.facebook.com/salefinder.se" target="_blank"><img src="http://www.salefinder.se/assets/images/icon-facebook.png" /></a>
+																																																								</li>
+																																																								<li>
+																																																									<a href="#"><img src="http://www.salefinder.se/assets/images/icon-twitter.png" /></a>
+																																																								</li>
+																																																								<li>
+																																																									<a href="#"><img src="http://www.salefinder.se/assets/images/icon-youtube.png" /></a>
+																																																								</li>
+																																																							</ul>
+																																																						</div><!--follow_us-->
+																																																						<div class="clear"></div>
+																																																						<div class="footer_text">
+
+																																																							<p>
+																																																								&copy; 2013-2014 SaleFinder Norden.
+																																																							</p>
+																																																						</div><!--footer_text-->
+																																																					</div><!--footer-->
+																																																					<!--toPopup end-->
+																																																					<div id="toPopup">
+																																																						<div class="close" ></div>
+																																																						<span class="ecs_tooltip">Press Esc to close <span class="arrow"></span></span>
+																																																						<div id="popup_content"> <!--your content start-->
+																																																							<p dir="ltr">SaleFinder Allm&auml;na Villkor</p>
+																																																							<h3 dir="ltr"><span>Allm&auml;nt</span></h3>
+																																																							<p dir="ltr"><span>Dessa allm&auml;nna villkor ("Allm&auml;nna Villkoren"), tillsammans med &ouml;vriga villkor som finns p&aring; www.salefinder.se ("Webbplatsen") samt &ouml;vriga villkor som Salefinder i vissa fall tillhandah&aring;ller en anv&auml;ndare separat, beskriver de villkor som &auml;r till&auml;mpliga vid anv&auml;ndning av Salefinder webbplats samt vid anv&auml;ndning av Salefinders tj&auml;nster och varor. </span></p>
+																																																							<p dir="ltr"><span>Genom att anv&auml;nda tj&auml;nsterna och/eller varorna p&aring; www.salefinder.se godk&auml;nner du dessa Allm&auml;nna Villkor och f&ouml;rbinder dig att f&ouml;lja dem. Dessa Allm&auml;nna Villkor g&auml;ller fr&aring;n den 2013-10-01.</span></p>
+																																																							<p dir="ltr"><span>Salefinder kan komma att &auml;ndra dessa Allm&auml;nna Villkor och kommer d&aring; att publicera de &auml;ndrade Allm&auml;nna Villkoren p&aring; www.salefinder.se. De &auml;ndrade villkoren blir g&auml;llande f&ouml;r nya anv&auml;ndare fr&aring;n och med det datum de publiceras p&aring; Webbplatsen. Redan existerande anv&auml;ndare blir bundna av de &auml;ndrade villkoren 30 dagar efter meddelande via e-post eller genom publicering p&aring; Webbplatsen.</span></p>
+																																																							<p><span><span><br /></span></span></p>
+																																																							<h3 dir="ltr"><span>Immateriella r&auml;ttigheter</span></h3>
+																																																							<p dir="ltr"><span>Alla produkter p&aring; Webbplatsen s&auml;ljs av annan webbutik och inte Salefinder, och d&auml;rf&ouml;r &auml;gs produkterna inte av Salefinder, s&aring;vidda det st&aring;r att produkten g&aring;r att k&ouml;pa hos Salefinder. Webbplatsens layout &auml;r skyddat av upphovsr&auml;tt, varum&auml;rkesr&auml;tt, patent och/eller andra immaterialr&auml;ttsliga regler.</span></p>
+																																																							<p dir="ltr"><span>Du f&aring;r skriva ut enskilda sidor fr&aring;n Salefinder webbsida men du f&aring;r i &ouml;vrigt inte kopiera, reproducera, publicera, ladda upp, skicka eller distribuera n&aring;got material eller n&aring;gon information utan f&ouml;reg&aring;ende skriftligt tillst&aring;nd fr&aring;n Salefinder.</span></p>
+																																																							<p><span><span><br /></span></span></p>
+																																																							<h3 dir="ltr"><span>Anv&auml;ndargenererat inneh&aring;ll</span></h3>
+																																																							<p dir="ltr"><span>Med anv&auml;ndargenererat inneh&aring;ll avses allt s&aring;dant inneh&aring;ll som en anv&auml;ndare av tj&auml;nst p&aring; Webbplatsen skapar och/eller l&auml;gger upp p&aring; Webbsidan som t.ex. bilder och annonstexter ("Anv&auml;ndargenererat inneh&aring;ll").</span></p>
+																																																							<p dir="ltr"><span>Du garanterar att du innehar n&ouml;dv&auml;ndiga r&auml;ttigheter till det Anv&auml;ndargenererade inneh&aring;llet, antingen genom att du sj&auml;lv har skapat detta (vare sig det &auml;r exempelvis en bild eller en annonstext), eller att alla som har medverkat har gett dig tillst&aring;nd att anv&auml;nda det Anv&auml;ndargenererade inneh&aring;llet p&aring; Webbsidan i enligt med de Allm&auml;nna Villkoren.</span></p>
+																																																							<p dir="ltr"><span>Du garanterar att Anv&auml;ndargenererat inneh&aring;ll inte inneh&aring;ller upphovsr&auml;ttsligt skyddat material, s&aring;som upphovsr&auml;ttsligt skyddat material som du inte har f&aring;tt till&aring;telse att anv&auml;nda i det Anv&auml;ndargenererade materialet och inte heller annans logotyp.</span></p>
+																																																							<p dir="ltr"><span>Du garanterar att du sett till att de personer som kan identifieras i det Anv&auml;ndargenererade inneh&aring;llet (exempelvis i en bild) &auml;r medvetna om hur materialet kommer att anv&auml;ndas och att de uttryckligen har godk&auml;nt att f&ouml;rekomma i det Anv&auml;ndargenererade inneh&aring;llet och att Salefinder &auml;ven kan komma att anv&auml;nda det Anv&auml;ndargenererade inneh&aring;llet i marknadsf&ouml;ringssyfte.</span></p>
+																																																							<p dir="ltr"><span>Genom att l&auml;gga upp Anv&auml;ndargenererat inneh&aring;ll, exempelvis vid inf&ouml;randet av en annons, ger du Salefinder en oinskr&auml;nkt r&auml;tt att fritt f&ouml;rfoga &ouml;ver det Anv&auml;ndargenererade inneh&aring;llet, genom att till exempel bearbeta, formatanpassa, lagra eller kopiera det och g&ouml;ra det tillg&auml;ngligt f&ouml;r allm&auml;nheten oavsett mediekanal och att vidareuppl&aring;ta dessa r&auml;ttigheter till eventuella samarbetspartners. Salefinder f&aring;r &auml;ven anv&auml;nda det Anv&auml;ndargenererade inneh&aring;llet i marknadsf&ouml;ringssyfte. Salefinder r&auml;ttigheter kvarst&aring;r &auml;ven efter att en annons har raderats.</span></p>
+																																																							<p dir="ltr"><span>Du efterger h&auml;rmed alla krav p&aring; ers&auml;ttning fr&aring;n Salefinder f&ouml;r Salefinders anv&auml;ndning av det Anv&auml;ndargenererade inneh&aring;llet.</span></p>
+																																																							<h3 dir="ltr"><span>Ansvar</span></h3>
+																																																							<p dir="ltr"><span>Salefinder garanterar inte kontinuerlig, oavbruten eller s&auml;ker tillg&aring;ng till sina tj&auml;nster/varor. Driften av Webbplatsen kan komma att st&ouml;ras av ett antal faktorer utanf&ouml;r Salefinders kontroll och Salefinder st&auml;ller inga garantier g&auml;llande webbsidans funktion eller tillg&auml;nglighet. Salefinder kan inte g&ouml;ras ansvarigt f&ouml;r skador som direkt eller indirekt orsakas av anv&auml;ndning av Webbplatsen och dess inneh&aring;ll. Vid tekniska fel ers&auml;tts h&ouml;gst annonskostnaden.</span></p>
+																																																							<p dir="ltr"><span>Webbplatsen &auml;r huvudsakligen en annonsplats. Webbplatsen &auml;r s&aring;ledes ett forum som l&aring;ter anv&auml;ndare annonsera sina produkter. Salefinder har ingen kontroll &ouml;ver eller medverkar i transaktionen mellan en k&ouml;pare och en s&auml;ljare. Du ska inte anta att ett erbjudande, en f&ouml;rs&auml;ljning eller ett k&ouml;p av ett objekt &auml;r giltigt och lagligt endast f&ouml;r att det f&ouml;rekommer p&aring; Webbsidan. Salefinder ansvarar inte f&ouml;r den utannonserade varan eller tj&auml;nsten, och ansvarar inte f&ouml;r relation mellan k&ouml;pare och s&auml;ljare n&auml;r k&ouml;paren l&auml;mnat Webbplatsen och g&ouml;r ett k&ouml;p hos s&auml;ljare som &auml;r en tredjeparts butik.</span></p>
+																																																							<p dir="ltr"><span>Salefinder ansvarar inte f&ouml;r skada som beror p&aring; uteblivna eller f&ouml;rdr&ouml;jda annonssvar eller p&aring; felaktig information i annonstexten.</span></p>
+																																																							<p><span><span><br /></span></span></p>
+																																																							<h3 dir="ltr"><span>Skadeers&auml;ttning</span></h3>
+																																																							<p dir="ltr"><span>Du som anv&auml;ndare &aring;tar dig att h&aring;lla Salefinder skadesl&ouml;st f&ouml;r det fall att n&aring;gon tredje part st&auml;ller krav p&aring; ers&auml;ttning p&aring; grund av Anv&auml;ndargenererat inneh&aring;ll eller p&aring; grund av att du som anv&auml;ndare i &ouml;vrigt har agerat i strid med dessa Allm&auml;nna Villkor eller i strid med g&auml;llande lag eller tredje parts r&auml;ttighet.</span></p>
+																																																							<p><span><span><br /></span></span></p>
+																																																							<h3 dir="ltr"><span>Personuppgifter</span></h3>
+																																																							<p dir="ltr"><span>Salefinder samlar in och anv&auml;nder ett f&aring;tal uppgifter f&ouml;r att leverera och uppr&auml;tth&aring;lla en enkel, effektiv och trygg k&ouml;p- och s&auml;ljsida med tillh&ouml;rande tj&auml;nster. Uppgifterna kan &auml;ven komma att anv&auml;ndas f&ouml;r att skicka ut anpassad information och erbjudanden om Salefinder-relaterade tj&auml;nster. </span></p>
+																																																							<p dir="ltr"><span>De uppgifter vi samlar in n&auml;r du anv&auml;nder v&aring;ra tj&auml;nster &auml;r:</span></p>
+																																																							<ul>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Namn</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>E-postadress</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>F&ouml;delse&aring;r</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>K&ouml;n</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Stad</span></p>
+																																																								</li>
+																																																							</ul>
+																																																							<p dir="ltr"><span>N&auml;r du l&auml;gger in en annons, anv&auml;nder en tj&auml;nst eller kontaktar v&aring;r kundtj&auml;nst medger du att Salefinder anv&auml;nder, sparar och kan l&auml;mna ut dina personuppgifter till andra s&aring;som samarbetspartners, eller till beh&ouml;riga myndigheter som Polisen, Skatteverket m.fl.</span></p>
+																																																							<p dir="ltr"><span>Om du inte kan godta v&aring;r personuppgiftshantering eller v&aring;ra andra villkor ber vi dig avst&aring; fr&aring;n annonsering och att inte anv&auml;nda v&aring;ra tj&auml;nster.</span></p>
+																																																							<p dir="ltr"><span>Personuppgiftsansvarig &auml;r Salefinder Norden HB, Org. nr: 969763-9947, Bolagets s&auml;te: Lund. Genom att skriva till Salefinder och ange de uppgifter du anv&auml;nt vid registrering eller korrespondens, kan du kostnadsfritt en g&aring;ng per &aring;r, f&aring; veta vilka uppgifter Salefinder har registrerat om dig och hur dessa anv&auml;nds. Du kan n&auml;r som helst skriftligen beg&auml;ra att uppgifter om dig korrigeras eller raderas om de &auml;r felaktiga.</span></p>
+																																																							<h3 dir="ltr"><span>&Aring;ngerr&auml;tt</span></h3>
+																																																							<p dir="ltr"><span>Du &auml;r medveten om att genom att du tar del av eller p&aring;b&ouml;rjar utnyttjandet av de tj&auml;nster och/eller varor som finns p&aring; Webbsidan f&ouml;religger inte n&aring;gon &aring;ngerr&auml;tt.</span></p>
+																																																							<h3 dir="ltr"><span>Till&auml;mplig lag och tvistel&ouml;sning</span></h3>
+																																																							<p dir="ltr"><span>Svensk lag skall g&auml;lla avseende dessa Allm&auml;nna Villkor och tvister ska l&ouml;sas i svensk domstol.</span></p>
+																																																							<h3 dir="ltr"><span>Registrering f&ouml;r medlemskap</span></h3>
+																																																							<p dir="ltr"><span>Registering som medlem &auml;r till f&ouml;r att anv&auml;ndas av privatpersoner som &auml;r beh&ouml;riga att ing&aring; avtal enligt vad som ovan anges i dessa Allm&auml;nna Villkor.</span></p>
+																																																							<h3 dir="ltr"><span>Registrering f&ouml;r annons&ouml;rer</span></h3>
+																																																							<p dir="ltr"><span>Registrering f&ouml;r annonsering &auml;r till f&ouml;r f&ouml;retag som vill annonsera sina egna produkter f&ouml;r f&ouml;rs&auml;ljning via det egna webbsidan som l&auml;nkas till fr&aring;n Salefinder Webbplats.</span></p>
+																																																							<h3 dir="ltr"><span>Regler f&ouml;r annonsering</span></h3>
+																																																							<p dir="ltr"><span>En annons ligger ute i en m&aring;nad fr&aring;n den dag som annonsen l&auml;ggs upp av dig som annons&ouml;r s&aring;vida du inte sj&auml;lv v&auml;ljer att plocka bort annonsen inom m&aring;nadsfristen.</span></p>
+																																																							<p dir="ltr"><span>Salefinder g&ouml;r inte anspr&aring;k p&aring; att angiven information, med avseende p&aring; vad som kan anses vara olagligt eller otillb&ouml;rligt och s&aring;ledes inte f&aring;r f&ouml;rekomma p&aring; Webbplatsen, &auml;r komplett eller utt&ouml;mmande. Informationen &auml;r s&aring;ledes i dessa avseenden endast exemplifierande. Du ansvarar sj&auml;lv som anv&auml;ndare f&ouml;r att den Information som du l&auml;gger in i annonser inte strider mot g&auml;llande lagar och regler. Du som anv&auml;ndare &auml;r personligen ansvarig f&ouml;r din annons.</span></p>
+																																																							<p dir="ltr"><span>Salefinder f&ouml;rbeh&aring;ller sig r&auml;tten att granska samtliga annonser och att neka eller avl&auml;gsna en annons p&aring; grund av att den bryter mot de Allm&auml;nna Villkoren, tredje parts upphovsr&auml;tt, annan r&auml;ttslig reglering eller mot Salefinders principer och anda. Om en annons nekas publicering f&aring;r du som anv&auml;ndare ett tillgodohavande p&aring; Salefinder motsvarande annonsens v&auml;rde, &aring;terbetalning sker ej. Ett tillgodohavande kan &auml;ven komma att erbjudas vid vissa tekniska problem eller felaktiga betalningar. Tillgodohavandet kopplas till annons&ouml;rens e-postadress, &auml;r giltigt under ett &aring;rs tid och kan inte anv&auml;ndas f&ouml;r delbetalning. Missbruk, manipulering eller anv&auml;ndande av tj&auml;nsten i strid mot Salefinders regler ger inte r&auml;tt till kompensation och inneb&auml;r att eventuella tillgodohavanden ogiltigf&ouml;rklaras.</span></p>
+																																																							<p dir="ltr"><span>Beskrivning:</span><span> Annonsrubriken m&aring;ste beskriva varan, inga f&ouml;retagsnamn eller l&auml;nkningar f&aring;r f&ouml;rekomma. Inga on&ouml;diga tecken f&aring;r anv&auml;ndas i rubriken. Varan m&aring;ste beskrivas i annonstexten, det &auml;r inte till&aring;tet att ha en l&auml;nk i annonstext eller beskrivning, eller att endast l&auml;nka till en annan sida. Annonstexter f&aring;r inte kopieras fr&aring;n annonser fr&aring;n andra annons&ouml;rer, dessa kan vara skyddade av upphovsr&auml;tt och/eller andra lagar och &auml;r Salefinders egendom enligt vad som anges ovan. Det &auml;r inte till&aring;tet att anv&auml;nda sig av s&ouml;kord i annonstexten.</span></p>
+																																																							<p dir="ltr"><span>Butik: </span><span>Du som annonserar m&aring;ste kunna h&auml;nvisa en bes&ouml;kare p&aring; Webbplats till din hemsida f&ouml;r att kunna se mer detaljer och g&ouml;ra eventuell k&ouml;p. Det &auml;r inte till&aring;tet att skriva ett telefonnummer eller e-post adress f&ouml;r kunden att kontakta p&aring;. L&auml;nken fr&aring;n www.salefinder.se till din webbutik m&aring;ste l&auml;nkas direkt till den aktuella produktssidan som kunden &auml;r inne p&aring; i Salefinder Webbplats.</span></p>
+																																																							<p dir="ltr"><span>Inga dubbletter:</span><span> Det &auml;r inte till&aring;tet att l&auml;gga in annonser om samma vara mer &auml;n en g&aring;ng samtidigt. Radera den gamla annonsen f&ouml;rst innan du l&auml;gger in den nya. Det &auml;r inte heller till&aring;tet att l&auml;gga in annonser med samma vara under mer &auml;n en kategori.</span></p>
+																																																							<p dir="ltr"><span>Byte av vara eller tj&auml;nst i annons:</span><span> Det &auml;r inte till&aring;tet att byta ut eller l&auml;gga till en vara/tj&auml;nst vid &auml;ndring eller f&ouml;rnyelse av annonsen.</span></p>
+																																																							<p dir="ltr"><span>Ovederh&auml;ftiga/Orealistiska erbjudanden:</span><span> Det &auml;r inte till&aring;tet att annonsera om orealistiska erbjudanden. Salefinder f&ouml;rbeh&aring;ller sig r&auml;tten att neka eller avbryta publicering av annonser som enligt Salefinders bed&ouml;mning &auml;r ovederh&auml;ftiga eller orealistiska. Slumpvisa eller anm&auml;lningsinitierade kontroller genomf&ouml;rs fortl&ouml;pande.</span></p>
+																																																							<p dir="ltr"><span>Kategorisering:</span><span> Annonsen skall l&auml;ggas i den kategori som b&auml;st beskriver din vara eller tj&auml;nst. Det &auml;r inte till&aring;tet att blanda varor och/eller tj&auml;nster i samma annons n&auml;r respektive vara inte &auml;r h&auml;nf&ouml;rbara under samma kategori. De olika varorna m&aring;ste i s&aring;dant fall delas upp i flera annonser. Slumpvisa eller anm&auml;lningsinitierade kontroller genomf&ouml;rs fortl&ouml;pande.</span></p>
+																																																							<p dir="ltr"><span>Kl&auml;der &amp; Skor samt Barnkl&auml;der &amp; Skor:</span><span> I dessa kategorier m&aring;ste dina kl&auml;desplagg st&auml;mma &ouml;verens med kl&auml;dtypen du valt i annonsformul&auml;ret. F&ouml;retag kan annonsera ett plagg per annons och kan ange alla storlekar som plagget finns tillg&auml;ngligt i. </span></p>
+																																																							<p dir="ltr"><span>Piratkopior och f&ouml;rfalskningar:</span><span> Det &auml;r inte till&aring;tet att annonsera piratkopior och f&ouml;rfalskningar av t.ex. m&auml;rkesprodukter, CD/DVD, programkort eller dator/TV-spelsprogramvara. N&auml;r du s&auml;ljer m&auml;rkesprodukter m&aring;ste du d&auml;rf&ouml;r intyga att varan &auml;r original.</span></p>
+																																																							<p dir="ltr"><span>Otill&aring;tna varor och tj&auml;nster:</span><span> Salefinder har restriktioner mot vissa typer av varor och tj&auml;nster som inte f&aring;r annonseras. F&ouml;r en lista med exempel p&aring; otill&aring;tna varor och tj&auml;nster, se Appendix 1 nedan.</span></p>
+																																																							<p dir="ltr"><span>St&ouml;tande och kr&auml;nkande inneh&aring;ll:</span><span> Annonser som kan verka st&ouml;tande eller kr&auml;nkande f&ouml;r folkgrupper och/eller enskilda individer godk&auml;nns inte. Vissa &aring;lderdomliga ben&auml;mningar p&aring; folkgrupper kan uppfattas som st&ouml;tande och f&aring;r inte anv&auml;ndas. Bilder och annonser av kr&auml;nkande karakt&auml;r till&aring;ts inte.</span></p>
+																																																							<p><span><span><br /></span></span></p>
+																																																							<p dir="ltr"><span>L&auml;nkar och h&auml;nvisningar:</span><span> Endast annons&ouml;rer med butiker p&aring; Webbsidan har m&ouml;jlighet att ha l&auml;nkar med i annonsen. L&auml;nkar och h&auml;nvisningar i annonser skall vara relevanta f&ouml;r varan du annonserar om. L&auml;nken till annons&ouml;rens butik m&aring;ste g&aring; direkt till produktsidan som anv&auml;ndaren klickar p&aring; Webbplats. Du som annons&ouml;r ansvarar f&ouml;r inneh&aring;llet p&aring; den webbsida du l&auml;nkar till. </span></p>
+																																																							<p dir="ltr"><span>Bilder:</span><span> Bilder skall vara relevanta f&ouml;r varan du annonserar och f&aring;r inte inneh&aring;lla &ouml;vrig text, f&ouml;retagsnamn, logotyper, URL:er eller andra grafiska till&auml;gg som kan tolkas som generell f&ouml;retagsmarknadsf&ouml;ring. Det &auml;r inte heller till&aring;tet att systematiskt anv&auml;nda ramar eller andra grafiska effekter i annonsens bild(er) som medf&ouml;r att annonsen framh&auml;vs p&aring; bekostnad av andra annonser i listningvyn.</span></p>
+																																																							<p dir="ltr"><span>Logotyper:</span><span> Det &auml;r inte till&aring;tet att anv&auml;nda annans logotyp i en annons (oavsett om logotypen &auml;r del av en bild eller film) ut&ouml;ver s&aring;dan logotyp som finns p&aring; den vara som annonseras, eller om annons&ouml;ren har f&aring;tt r&auml;ttigheter fr&aring;n det bolaget som &auml;ger logotyp. F&ouml;retagslogotyper f&aring;r inte anv&auml;ndas som bilder.</span></p>
+																																																							<p><span><span><br /></span></span></p>
+																																																							<h2 dir="ltr"><span>Appendix 1</span></h2>
+																																																							<p dir="ltr"><span>Det &auml;r f&ouml;rbjudet att annonsera om f&ouml;ljande produkter p&aring; SaleFinder. Listan kan uppdateras utan f&ouml;rvarning och kan b&ouml;rja g&auml;lla i samband med publisering p&aring; www.salefinder.se<br class="kix-line-break" /></span></p>
+																																																							<ul>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Alkohol</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Begagnade produkter</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Djur, v&auml;xter och annat levande</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Mediciner och droger (narkotikadroger)</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Fyrverkerier och spr&auml;ngmedel</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>ID dokument</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Kemiska substanser, f&ouml;rutom sk&ouml;nhetsprodukter</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Mat och annat &auml;tbart</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Lotteri</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Piratkopior</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Pornografisk material och sexleksaker</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Produkter som inte uppfyller h&auml;lso- och milj&ouml;krav</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Stulna produkter</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Tj&auml;nster</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Tobak</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Utl&auml;ndsk valuta och annat v&auml;rdepapper</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Vapen</span></p>
+																																																								</li>
+																																																								<li dir="ltr">
+																																																									<p dir="ltr"><span>Produkter som &auml;r import- och s&auml;ljf&ouml;rbjudna i Sverige enligt lag.</span></p>
+																																																								</li>
+																																																							</ul>    </div> <!--your content end-->
+																																																						</div> 
+																																																						<div class="loader"></div>
+																																																						<div id="backgroundPopup"></div>
+																																																						<script>
+																																																						jQuery(function($) {
+		// popup code
+		$("a.topopup").click(function() {
+	            loading(); // loading
+	            setTimeout(function(){ // then show popup, deley in .5 second
+	                loadPopup(); // function show popup
+	            }, 500); // .5 second
+	            return false;
+	        });
+
+		/* event for close the popup */
+		$("div.close").hover(
+			function() {
+				$('span.ecs_tooltip').show();
+			},
+			function () {
+				$('span.ecs_tooltip').hide();
+			}
+			);
+
+		$("div.close").click(function() {
+	        disablePopup();  // function close pop up
+	    });
+
+		$(this).keyup(function(event) {
+	        if (event.which == 27) { // 27 is 'Ecs' in the keyboard
+	            disablePopup();  // function close pop up
+	    }
+	});
+
+		$("div#backgroundPopup").click(function() {
+	        disablePopup();  // function close pop up
+	    });
+
+		$('a.livebox').click(function() {
+			alert('Hello World!');
+			return false;
+		});
+
+		/************** start: functions. **************/
+		function loading() {
+			$("div.loader").show();
+		}
+		function closeloading() {
+			$("div.loader").fadeOut('normal');
+		}
+
+	    var popupStatus = 0; // set value
+
+	    function loadPopup() {
+	        if(popupStatus == 0) { // if value is 0, show popup
+	            closeloading(); // fadeout loading
+	            $("#toPopup").fadeIn(0500); // fadein popup div
+	            $("#backgroundPopup").css("opacity", "0.7"); // css opacity, supports IE7, IE8
+	            $("#backgroundPopup").fadeIn(0001);
+	            popupStatus = 1; // and set value to 1
+	        }
+	    }
+
+	    function disablePopup() {
+	        if(popupStatus == 1) { // if value is 1, close popup
+	        	$("#toPopup").fadeOut("normal");
+	        	$("#backgroundPopup").fadeOut("normal");
+	            popupStatus = 0;  // and set value to 0
+	        }
+	    }
+	    /************** end: functions. **************/
+	}); // jQuery End
+</script>        			</div><!--container-->
+</div><!--wrapper-->
+</body>
+</html>

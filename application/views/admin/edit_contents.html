@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<title><?=$this->config->item('title');?> Admin</title>
+	<?=css_asset("style.css","admin")?>
+	<?=css_asset("jquery.wysiwyg.css","admin")?>
+	<?=css_asset("facebox.css","admin")?>
+	<?=css_asset("visualize.css","admin")?>
+	<?=css_asset("date_input.css","admin")?>
+	<?=css_asset("datatables.css","admin")?>
+    
+	<?=js_asset("jquery.js","admin")."\n";?>
+	<?=js_asset("jquery.select_skin.js","admin")."\n";?>
+	<?=js_asset("facebox.js","admin");?>
+	<?=js_asset("jquery.validate.min.js","admin")?>
+	<?=js_asset("jquery.dataTables.min.js","admin")?>
+	<?=js_asset("jquery.wysiwyg.js","admin")?>
+	<?=js_asset("jquery.visualize.js","admin")?>
+	<?=js_asset("tiny_mce/tiny_mce.js","admin")?>	
+	<?=js_asset("custom.js","admin")?>		
+	<!--[if lt IE 8]><?=css_asset("ie.css","admin")?><![endif]-->
+	<script type="text/javascript">
+	tinyMCE.init({
+		theme : "advanced",
+        mode : "textareas",
+        plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+		skin : "o2k7",
+		skin_variant : "silver",
+        // Theme options
+        theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+        theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_statusbar_location : "bottom",
+        theme_advanced_resizing : false
+	});
+	</script>
+    
+</head>
+
+
+
+
+
+<body>
+	
+	<div id="hld">
+	
+		<div class="wrapper">		<!-- wrapper begins -->
+
+			<? include("header.html");?>
+			
+			
+			<div class="block">
+			
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					
+					<h2>Contents</h2>
+					<ul>
+			          <li><a href="<?=base_url()?>admin/contents">View Content</a></li>
+			        </ul>
+					
+				</div>		<!-- .block_head ends -->
+
+				<div id="addcats" class="block_content tab_content">
+			        <form method="post" id="form1" name="form1" action="" enctype="multipart/form-data">			          
+			          <p>
+			            <label>Page Name:</label>			
+			            <br />			
+			            <input name="c_name" type="text" class="required text small" id="c_name" value="<?=$edit_data['c_name']?>" />			
+			            <span class="note error"></span> </p>			
+			          <p>			
+			            <label> Page Title: </label>			
+			            <br />			
+			            <input name="c_title" type="text"  class="required text medium" id="c_title" value="<?=$edit_data['c_title']?>" />			
+			            <span class="note error"></span>
+                      </p>
+                      <p class="fileupload">
+			         	  <label>Or use Page title as Image:</label><br />                         
+                          <input type="file" id="fileupload" name="c_image" />
+			          </p>
+			          <p>
+			          	<img src="<?php echo base_url()?>assets/uploads/images/page_contents/<?php echo $edit_data['c_image'] ?>" width="200" height="20" /><br />
+			          </p>			
+			          <p>
+			            <label>Meta Keywords: </label>			
+			            <br />			
+			            <input name="c_keywords" type="text" class="text medium" id="c_keywords" value="<?=$edit_data['c_keywords']?>" />			
+			            <span class="note error"></span> </p>			
+			          <p>			
+			            <label>Meta Description: </label>			
+			            <br />			
+			            <input name="c_desc" type="text" class="text medium" id="c_desc" value="<?=$edit_data['c_desc']?>" />			
+			            <span class="note error"></span> </p>			
+			          <p>			
+			            <label>Page Text:</label>			
+			            <br />			
+			            <textarea name="c_text" style="width:700px; height:350px;"  id="c_text"><?=$edit_data['c_text']?></textarea>			
+			            <span class="note error"></span> </p>
+			          <p>
+			            <input type="submit" value="Submit" id="add" class="submit small" name="add">
+			          </p>
+			        </form>
+			    </div>
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+			</div>		
+		
+			<? include("footer.html");?>
+		
+		
+		</div>						<!-- wrapper ends -->
+		
+	</div>		<!-- #hld ends -->
+	
+	
+	
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+		    $('a[rel*=facebox]').facebox();
+		    $("form select.styled").select_skin();
+		    $("#form1").validate({
+		           errorPlacement: function(error, element) {
+		           error.appendTo(element.next('span'));
+				}
+		    });
+		} );
+	
+		
+	</script>
+
+	
+</body>
+</html>
